@@ -1,0 +1,2278 @@
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0f0f0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    padding: 0 20px 40px;
+  }
+
+  /* ===== TAB NAVIGATION ===== */
+  .tab-bar {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 20px 0 0;
+    position: sticky;
+    top: 0;
+    background: #0f0f0f;
+    z-index: 100;
+    border-bottom: 1px solid #222;
+    margin-bottom: 32px;
+  }
+  .tab-btn {
+    padding: 12px 28px;
+    background: transparent;
+    color: #888;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .tab-btn:hover { color: #ccc; }
+  .tab-btn.active {
+    color: #fff;
+    border-bottom-color: #fff;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 48px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    transition: border-color 0.3s;
+  }
+
+  .card:hover {
+    border-color: #444;
+  }
+
+  .card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .card p {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .icon-container {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Base icon: 4 columns x 3 rows of dots */
+  .halftone {
+    display: grid;
+    grid-template-columns: repeat(4, 10px);
+    grid-template-rows: repeat(3, 10px);
+    gap: 4px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background: #d0d0d0;
+    border-radius: 50%;
+  }
+
+  /* ============================
+     1. PULSE
+     ============================ */
+  .anim-pulse .dot {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .anim-pulse .dot:nth-child(1)  { animation-delay: 0.00s; }
+  .anim-pulse .dot:nth-child(2)  { animation-delay: 0.08s; }
+  .anim-pulse .dot:nth-child(3)  { animation-delay: 0.16s; }
+  .anim-pulse .dot:nth-child(4)  { animation-delay: 0.24s; }
+  .anim-pulse .dot:nth-child(5)  { animation-delay: 0.12s; }
+  .anim-pulse .dot:nth-child(6)  { animation-delay: 0.20s; }
+  .anim-pulse .dot:nth-child(7)  { animation-delay: 0.28s; }
+  .anim-pulse .dot:nth-child(8)  { animation-delay: 0.36s; }
+  .anim-pulse .dot:nth-child(9)  { animation-delay: 0.24s; }
+  .anim-pulse .dot:nth-child(10) { animation-delay: 0.32s; }
+  .anim-pulse .dot:nth-child(11) { animation-delay: 0.40s; }
+  .anim-pulse .dot:nth-child(12) { animation-delay: 0.48s; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(0.3); opacity: 0.3; }
+  }
+
+  /* ============================
+     2. WAVE
+     ============================ */
+  .anim-wave .dot {
+    animation: wave 1.8s ease-in-out infinite;
+  }
+
+  .anim-wave .dot:nth-child(1)  { animation-delay: 0.0s; }
+  .anim-wave .dot:nth-child(2)  { animation-delay: 0.1s; }
+  .anim-wave .dot:nth-child(3)  { animation-delay: 0.2s; }
+  .anim-wave .dot:nth-child(4)  { animation-delay: 0.3s; }
+  .anim-wave .dot:nth-child(5)  { animation-delay: 0.0s; }
+  .anim-wave .dot:nth-child(6)  { animation-delay: 0.1s; }
+  .anim-wave .dot:nth-child(7)  { animation-delay: 0.2s; }
+  .anim-wave .dot:nth-child(8)  { animation-delay: 0.3s; }
+  .anim-wave .dot:nth-child(9)  { animation-delay: 0.0s; }
+  .anim-wave .dot:nth-child(10) { animation-delay: 0.1s; }
+  .anim-wave .dot:nth-child(11) { animation-delay: 0.2s; }
+  .anim-wave .dot:nth-child(12) { animation-delay: 0.3s; }
+
+  @keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  /* ============================
+     3. SPIN (whole icon rotates)
+     ============================ */
+  .anim-spin .halftone {
+    animation: spin 3s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ============================
+     4. STAGGER FADE
+     ============================ */
+  .anim-stagger .dot {
+    animation: staggerFade 2.4s ease-in-out infinite;
+  }
+
+  .anim-stagger .dot:nth-child(1)  { animation-delay: 0.0s; }
+  .anim-stagger .dot:nth-child(2)  { animation-delay: 0.2s; }
+  .anim-stagger .dot:nth-child(3)  { animation-delay: 0.4s; }
+  .anim-stagger .dot:nth-child(4)  { animation-delay: 0.6s; }
+  .anim-stagger .dot:nth-child(5)  { animation-delay: 0.8s; }
+  .anim-stagger .dot:nth-child(6)  { animation-delay: 1.0s; }
+  .anim-stagger .dot:nth-child(7)  { animation-delay: 1.2s; }
+  .anim-stagger .dot:nth-child(8)  { animation-delay: 1.4s; }
+  .anim-stagger .dot:nth-child(9)  { animation-delay: 1.6s; }
+  .anim-stagger .dot:nth-child(10) { animation-delay: 1.8s; }
+  .anim-stagger .dot:nth-child(11) { animation-delay: 2.0s; }
+  .anim-stagger .dot:nth-child(12) { animation-delay: 2.2s; }
+
+  @keyframes staggerFade {
+    0%, 100% { opacity: 0.1; transform: scale(0.5); }
+    50%      { opacity: 1;   transform: scale(1); }
+  }
+
+  /* ============================
+     5. BOUNCE
+     ============================ */
+  .anim-bounce .halftone {
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    30%      { transform: translateY(-12px); }
+    50%      { transform: translateY(0); }
+    70%      { transform: translateY(-6px); }
+    85%      { transform: translateY(0); }
+  }
+
+  /* ============================
+     6. RIPPLE (from center outward)
+     ============================ */
+  .anim-ripple .dot {
+    animation: ripple 2s ease-out infinite;
+  }
+
+  /* Distance from center: center dots = short delay, corners = long delay */
+  .anim-ripple .dot:nth-child(6)  { animation-delay: 0.0s; }
+  .anim-ripple .dot:nth-child(7)  { animation-delay: 0.0s; }
+  .anim-ripple .dot:nth-child(2)  { animation-delay: 0.12s; }
+  .anim-ripple .dot:nth-child(3)  { animation-delay: 0.12s; }
+  .anim-ripple .dot:nth-child(5)  { animation-delay: 0.12s; }
+  .anim-ripple .dot:nth-child(8)  { animation-delay: 0.12s; }
+  .anim-ripple .dot:nth-child(10) { animation-delay: 0.12s; }
+  .anim-ripple .dot:nth-child(11) { animation-delay: 0.12s; }
+  .anim-ripple .dot:nth-child(1)  { animation-delay: 0.24s; }
+  .anim-ripple .dot:nth-child(4)  { animation-delay: 0.24s; }
+  .anim-ripple .dot:nth-child(9)  { animation-delay: 0.24s; }
+  .anim-ripple .dot:nth-child(12) { animation-delay: 0.24s; }
+
+  @keyframes ripple {
+    0%   { transform: scale(1); opacity: 1; }
+    40%  { transform: scale(1.6); opacity: 0.4; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ============================
+     7. COLOR SHIFT
+     ============================ */
+  .anim-color .dot {
+    animation: colorShift 3s ease-in-out infinite;
+  }
+
+  .anim-color .dot:nth-child(1)  { animation-delay: 0.0s; }
+  .anim-color .dot:nth-child(2)  { animation-delay: 0.15s; }
+  .anim-color .dot:nth-child(3)  { animation-delay: 0.30s; }
+  .anim-color .dot:nth-child(4)  { animation-delay: 0.45s; }
+  .anim-color .dot:nth-child(5)  { animation-delay: 0.60s; }
+  .anim-color .dot:nth-child(6)  { animation-delay: 0.75s; }
+  .anim-color .dot:nth-child(7)  { animation-delay: 0.90s; }
+  .anim-color .dot:nth-child(8)  { animation-delay: 1.05s; }
+  .anim-color .dot:nth-child(9)  { animation-delay: 1.20s; }
+  .anim-color .dot:nth-child(10) { animation-delay: 1.35s; }
+  .anim-color .dot:nth-child(11) { animation-delay: 1.50s; }
+  .anim-color .dot:nth-child(12) { animation-delay: 1.65s; }
+
+  @keyframes colorShift {
+    0%, 100% { background: #d0d0d0; }
+    25%      { background: #6ee7b7; }
+    50%      { background: #818cf8; }
+    75%      { background: #f472b6; }
+  }
+
+  /* ============================
+     8. MATRIX RAIN (top-to-bottom cascade)
+     ============================ */
+  .anim-matrix .dot {
+    animation: matrixRain 1.6s ease-in-out infinite;
+  }
+
+  /* Row 1 (top) */
+  .anim-matrix .dot:nth-child(1)  { animation-delay: 0.0s; }
+  .anim-matrix .dot:nth-child(2)  { animation-delay: 0.1s; }
+  .anim-matrix .dot:nth-child(3)  { animation-delay: 0.05s; }
+  .anim-matrix .dot:nth-child(4)  { animation-delay: 0.15s; }
+  /* Row 2 (middle) */
+  .anim-matrix .dot:nth-child(5)  { animation-delay: 0.2s; }
+  .anim-matrix .dot:nth-child(6)  { animation-delay: 0.3s; }
+  .anim-matrix .dot:nth-child(7)  { animation-delay: 0.25s; }
+  .anim-matrix .dot:nth-child(8)  { animation-delay: 0.35s; }
+  /* Row 3 (bottom) */
+  .anim-matrix .dot:nth-child(9)  { animation-delay: 0.4s; }
+  .anim-matrix .dot:nth-child(10) { animation-delay: 0.5s; }
+  .anim-matrix .dot:nth-child(11) { animation-delay: 0.45s; }
+  .anim-matrix .dot:nth-child(12) { animation-delay: 0.55s; }
+
+  @keyframes matrixRain {
+    0%   { opacity: 0; transform: translateY(-10px); background: #22c55e; }
+    20%  { opacity: 1; transform: translateY(0); background: #4ade80; }
+    60%  { opacity: 1; transform: translateY(0); background: #d0d0d0; }
+    100% { opacity: 0; transform: translateY(10px); background: #166534; }
+  }
+
+  /* ============================
+     9. ORBIT (dots move in circular paths)
+     ============================ */
+  .anim-orbit .dot {
+    animation: orbit 2.5s ease-in-out infinite;
+  }
+
+  .anim-orbit .dot:nth-child(odd) {
+    animation-name: orbitCW;
+  }
+  .anim-orbit .dot:nth-child(even) {
+    animation-name: orbitCCW;
+  }
+
+  .anim-orbit .dot:nth-child(1)  { animation-delay: 0.0s; }
+  .anim-orbit .dot:nth-child(2)  { animation-delay: 0.1s; }
+  .anim-orbit .dot:nth-child(3)  { animation-delay: 0.2s; }
+  .anim-orbit .dot:nth-child(4)  { animation-delay: 0.3s; }
+  .anim-orbit .dot:nth-child(5)  { animation-delay: 0.15s; }
+  .anim-orbit .dot:nth-child(6)  { animation-delay: 0.25s; }
+  .anim-orbit .dot:nth-child(7)  { animation-delay: 0.35s; }
+  .anim-orbit .dot:nth-child(8)  { animation-delay: 0.45s; }
+  .anim-orbit .dot:nth-child(9)  { animation-delay: 0.3s; }
+  .anim-orbit .dot:nth-child(10) { animation-delay: 0.4s; }
+  .anim-orbit .dot:nth-child(11) { animation-delay: 0.5s; }
+  .anim-orbit .dot:nth-child(12) { animation-delay: 0.6s; }
+
+  @keyframes orbitCW {
+    0%, 100% { transform: translate(0, 0); }
+    25%      { transform: translate(3px, -3px); }
+    50%      { transform: translate(0, -6px); }
+    75%      { transform: translate(-3px, -3px); }
+  }
+
+  @keyframes orbitCCW {
+    0%, 100% { transform: translate(0, 0); }
+    25%      { transform: translate(-3px, 3px); }
+    50%      { transform: translate(0, 6px); }
+    75%      { transform: translate(3px, 3px); }
+  }
+
+  /* ============================
+     10. MORPH (dots change shape)
+     ============================ */
+  .anim-morph .dot {
+    animation: morph 3s ease-in-out infinite;
+  }
+
+  .anim-morph .dot:nth-child(1)  { animation-delay: 0.0s; }
+  .anim-morph .dot:nth-child(2)  { animation-delay: 0.25s; }
+  .anim-morph .dot:nth-child(3)  { animation-delay: 0.5s; }
+  .anim-morph .dot:nth-child(4)  { animation-delay: 0.75s; }
+  .anim-morph .dot:nth-child(5)  { animation-delay: 0.15s; }
+  .anim-morph .dot:nth-child(6)  { animation-delay: 0.40s; }
+  .anim-morph .dot:nth-child(7)  { animation-delay: 0.65s; }
+  .anim-morph .dot:nth-child(8)  { animation-delay: 0.90s; }
+  .anim-morph .dot:nth-child(9)  { animation-delay: 0.30s; }
+  .anim-morph .dot:nth-child(10) { animation-delay: 0.55s; }
+  .anim-morph .dot:nth-child(11) { animation-delay: 0.80s; }
+  .anim-morph .dot:nth-child(12) { animation-delay: 1.05s; }
+
+  @keyframes morph {
+    0%, 100% { border-radius: 50%; transform: scale(1) rotate(0deg); }
+    25%      { border-radius: 20%; transform: scale(1.1) rotate(45deg); }
+    50%      { border-radius: 0%;  transform: scale(0.9) rotate(90deg); }
+    75%      { border-radius: 50% 0% 50% 0%; transform: scale(1.1) rotate(135deg); }
+  }
+
+  /* Pause on hover */
+  .card:hover .halftone,
+  .card:hover .dot,
+  .card:hover svg,
+  .card:hover svg circle,
+  .card:hover svg line,
+  .card:hover svg path,
+  .card:hover svg g,
+  .card:hover .l-icon,
+  .card:hover .ripple-ring,
+  .card:hover .eye-ring {
+    animation-play-state: paused;
+  }
+
+  .icon-wrap {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section-divider {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 24px 0 8px;
+    border-top: 1px solid #2a2a2a;
+    margin-top: 8px;
+  }
+  .section-divider h2 {
+    font-size: 18px;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .section-divider p {
+    font-size: 13px;
+    color: #666;
+  }
+
+  /* ============================================
+     11–20: SVG-BASED (exact Figma icon structure)
+     17 dots, 5 concentric rings, radial layout
+     ============================================ */
+
+  /* 11. BREATHE — gentle uniform scale */
+  .anim-breathe svg {
+    animation: svgBreathe 2.5s ease-in-out infinite;
+  }
+  @keyframes svgBreathe {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.15); }
+  }
+
+  /* 12. RADIAL PULSE — rings pulse outward from center */
+  .anim-radial-pulse .ring0 { animation: radialP 2s ease-in-out infinite; animation-delay: 0s; }
+  .anim-radial-pulse .ring1 { animation: radialP 2s ease-in-out infinite; animation-delay: 0.15s; }
+  .anim-radial-pulse .ring2 { animation: radialP 2s ease-in-out infinite; animation-delay: 0.30s; }
+  .anim-radial-pulse .ring3 { animation: radialP 2s ease-in-out infinite; animation-delay: 0.45s; }
+  .anim-radial-pulse .ring4 { animation: radialP 2s ease-in-out infinite; animation-delay: 0.60s; }
+  @keyframes radialP {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.25; transform: scale(0.4); }
+  }
+
+  /* 13. HEARTBEAT — quick double-pump */
+  .anim-heartbeat svg {
+    animation: heartbeat 1.4s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14%      { transform: scale(1.18); }
+    28%      { transform: scale(1); }
+    42%      { transform: scale(1.12); }
+    56%      { transform: scale(1); }
+  }
+
+  /* 14. SHIMMER — light sweep left to right */
+  .anim-shimmer circle { animation: shimmer 2s ease-in-out infinite; }
+  .anim-shimmer .col-0 { animation-delay: 0.0s; }
+  .anim-shimmer .col-1 { animation-delay: 0.15s; }
+  .anim-shimmer .col-2 { animation-delay: 0.30s; }
+  .anim-shimmer .col-3 { animation-delay: 0.45s; }
+  .anim-shimmer .col-4 { animation-delay: 0.60s; }
+  @keyframes shimmer {
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 1; }
+  }
+
+  /* 15. MAGNETIC PULL — dots contract toward center */
+  .anim-magnetic circle {
+    animation: magnetPull 2.5s ease-in-out infinite;
+  }
+  @keyframes magnetPull {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(var(--dx), var(--dy)); }
+  }
+
+  /* 16. ORBITAL RINGS — each ring rotates independently */
+  .anim-orbital .rg1 { animation: orbitR 3s linear infinite; transform-origin: 16px 16px; }
+  .anim-orbital .rg2 { animation: orbitR 4.5s linear infinite reverse; transform-origin: 16px 16px; }
+  .anim-orbital .rg3 { animation: orbitR 6s linear infinite; transform-origin: 16px 16px; }
+  .anim-orbital .rg4 { animation: orbitR 8s linear infinite reverse; transform-origin: 16px 16px; }
+  @keyframes orbitR {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* 17. WAVE — vertical wave across columns */
+  .anim-svg-wave circle { animation: svgWave 2s ease-in-out infinite; }
+  .anim-svg-wave .col-0 { animation-delay: 0.0s; }
+  .anim-svg-wave .col-1 { animation-delay: 0.12s; }
+  .anim-svg-wave .col-2 { animation-delay: 0.24s; }
+  .anim-svg-wave .col-3 { animation-delay: 0.36s; }
+  .anim-svg-wave .col-4 { animation-delay: 0.48s; }
+  @keyframes svgWave {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-2.5px); }
+  }
+
+  /* 18. SCATTER & REFORM — dots fly outward then snap back */
+  .anim-scatter circle { animation: scatter 3s ease-in-out infinite; }
+  @keyframes scatter {
+    0%, 75%, 100% { transform: translate(0, 0); opacity: 1; }
+    40%           { transform: translate(var(--sx), var(--sy)); opacity: 0.3; }
+  }
+
+  /* 19. GLOW PULSE — rings glow indigo outward */
+  .anim-glow .ring0 { animation: glowP 3s ease-in-out infinite; animation-delay: 0s; }
+  .anim-glow .ring1 { animation: glowP 3s ease-in-out infinite; animation-delay: 0.2s; }
+  .anim-glow .ring2 { animation: glowP 3s ease-in-out infinite; animation-delay: 0.4s; }
+  .anim-glow .ring3 { animation: glowP 3s ease-in-out infinite; animation-delay: 0.6s; }
+  .anim-glow .ring4 { animation: glowP 3s ease-in-out infinite; animation-delay: 0.8s; }
+  @keyframes glowP {
+    0%, 100% { fill: white; filter: drop-shadow(0 0 0px transparent); }
+    50%      { fill: #818cf8; filter: drop-shadow(0 0 4px #818cf8); }
+  }
+
+  /* 20. SLOW SPIN — whole icon rotates */
+  .anim-slow-spin svg {
+    animation: slowSpin 5s linear infinite;
+  }
+  @keyframes slowSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ============================================
+     TAB 2: JADE AI WEIGHTED MATRIX ANIMATIONS
+     3x3 grid, 9 nodes, 8 weighted connections
+     ============================================ */
+
+  /* Jade color palette */
+  :root {
+    --jade: #2dd4bf;
+    --jade-bright: #5eead4;
+    --jade-dim: #0d9488;
+  }
+
+  .ref-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin-bottom: 40px;
+  }
+  .ref-row span { font-size: 13px; color: #666; }
+  .ref-icon {
+    background: #333; border-radius: 8px; padding: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* J1. BREATHE */
+  .j-breathe svg { animation: jBreathe 2.5s ease-in-out infinite; }
+  @keyframes jBreathe {
+    0%,100% { transform: scale(1); }
+    50%     { transform: scale(1.12); }
+  }
+
+  /* J2. CONNECTION CASCADE — lines flash by weight (heaviest first) */
+  .j-cascade line { animation: jCascadeFlash 3s ease-in-out infinite; }
+  .j-cascade .ln1 { animation-delay: 0s; }
+  .j-cascade .ln5 { animation-delay: 0.3s; }
+  .j-cascade .ln4 { animation-delay: 0.6s; }
+  .j-cascade .ln7 { animation-delay: 0.9s; }
+  .j-cascade .ln3 { animation-delay: 1.2s; }
+  .j-cascade .ln6 { animation-delay: 1.5s; }
+  .j-cascade .ln2 { animation-delay: 1.8s; }
+  .j-cascade .ln8 { animation-delay: 2.1s; }
+  @keyframes jCascadeFlash {
+    0%,15%,100% { stroke: white; filter: none; }
+    7% { stroke: var(--jade-bright); filter: drop-shadow(0 0 3px var(--jade)); }
+  }
+
+  /* J3. NODE RIPPLE — from center outward */
+  .j-ripple .nd-c  { animation: jRipple 2s ease-out infinite; animation-delay: 0s; }
+  .j-ripple .nd-tc, .j-ripple .nd-ml,
+  .j-ripple .nd-mr, .j-ripple .nd-bc { animation: jRipple 2s ease-out infinite; animation-delay: 0.2s; }
+  .j-ripple .nd-tl, .j-ripple .nd-tr,
+  .j-ripple .nd-bl, .j-ripple .nd-br { animation: jRipple 2s ease-out infinite; animation-delay: 0.4s; }
+  @keyframes jRipple {
+    0%,100% { transform: scale(1); opacity: 1; }
+    40%     { transform: scale(2); opacity: 0.3; }
+  }
+
+  /* J4. SLOW ROTATE */
+  .j-rotate svg { animation: jRotate 5s linear infinite; }
+  @keyframes jRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* J5. HEARTBEAT */
+  .j-heartbeat svg { animation: jHeart 1.4s ease-in-out infinite; }
+  @keyframes jHeart {
+    0%,100% { transform: scale(1); }
+    14% { transform: scale(1.15); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.10); }
+    56% { transform: scale(1); }
+  }
+
+  /* J6. J-TRACE — traces the letter J in jade green */
+  .j-trace .j-nd, .j-trace .j-ln {
+    animation: jTraceGlow 4s ease-in-out infinite;
+  }
+  .j-trace .bg-nd, .j-trace .bg-ln {
+    opacity: 0.2;
+  }
+  /* Sequence: top bar → diagonal stem → vertical stem → hook */
+  .j-trace .ln1  { animation-delay: 0.0s; }
+  .j-trace .nd-tl.j-nd { animation-delay: 0.0s; }
+  .j-trace .nd-tc.j-nd { animation-delay: 0.2s; }
+  .j-trace .ln2  { animation-delay: 0.3s; }
+  .j-trace .nd-tr.j-nd { animation-delay: 0.5s; }
+  .j-trace .ln4  { animation-delay: 0.7s; }
+  .j-trace .nd-c.j-nd  { animation-delay: 0.9s; }
+  .j-trace .ln6  { animation-delay: 1.1s; }
+  .j-trace .nd-bc.j-nd { animation-delay: 1.3s; }
+  .j-trace .ln8  { animation-delay: 1.5s; }
+  .j-trace .nd-bl.j-nd { animation-delay: 1.7s; }
+  @keyframes jTraceGlow {
+    0%,100% { stroke: white; fill: white; filter: none; opacity: 0.2; }
+    15%,40% { stroke: var(--jade-bright); fill: var(--jade-bright); filter: drop-shadow(0 0 4px var(--jade)); opacity: 1; }
+  }
+
+  /* J7. SYNAPSE FIRE — connections flash randomly like neurons */
+  .j-synapse .ln1 { animation: jSynapse 2.5s ease-in-out infinite 0s; }
+  .j-synapse .ln5 { animation: jSynapse 2.5s ease-in-out infinite 0.4s; }
+  .j-synapse .ln4 { animation: jSynapse 2.5s ease-in-out infinite 0.9s; }
+  .j-synapse .ln7 { animation: jSynapse 2.5s ease-in-out infinite 1.3s; }
+  .j-synapse .ln3 { animation: jSynapse 2.5s ease-in-out infinite 0.2s; }
+  .j-synapse .ln6 { animation: jSynapse 2.5s ease-in-out infinite 1.6s; }
+  .j-synapse .ln2 { animation: jSynapse 2.5s ease-in-out infinite 0.7s; }
+  .j-synapse .ln8 { animation: jSynapse 2.5s ease-in-out infinite 1.9s; }
+  @keyframes jSynapse {
+    0%,20%,100% { stroke-opacity: var(--base-op); filter: none; }
+    10% { stroke-opacity: 1; stroke: var(--jade-bright); filter: drop-shadow(0 0 5px var(--jade)); }
+  }
+
+  /* J8. SHIMMER SWEEP — left to right */
+  .j-shimmer circle { animation: jShimmer 2s ease-in-out infinite; }
+  .j-shimmer line { animation: jShimmerLine 2s ease-in-out infinite; }
+  .j-shimmer .col-0 { animation-delay: 0s; }
+  .j-shimmer .col-1 { animation-delay: 0.2s; }
+  .j-shimmer .col-2 { animation-delay: 0.4s; }
+  @keyframes jShimmer {
+    0%,100% { opacity: 0.15; }
+    50% { opacity: 1; }
+  }
+  @keyframes jShimmerLine {
+    0%,100% { stroke-opacity: 0.08; }
+    50% { stroke-opacity: 0.9; }
+  }
+
+  /* J9. WEIGHT OSCILLATE — line weights breathe */
+  .j-weight-osc line {
+    animation: jWeightOsc 3s ease-in-out infinite;
+  }
+  .j-weight-osc .ln1 { animation-delay: 0s; }
+  .j-weight-osc .ln5 { animation-delay: 0.3s; }
+  .j-weight-osc .ln4 { animation-delay: 0.6s; }
+  .j-weight-osc .ln7 { animation-delay: 0.9s; }
+  .j-weight-osc .ln3 { animation-delay: 1.2s; }
+  .j-weight-osc .ln6 { animation-delay: 1.5s; }
+  .j-weight-osc .ln2 { animation-delay: 1.8s; }
+  .j-weight-osc .ln8 { animation-delay: 2.1s; }
+  @keyframes jWeightOsc {
+    0%,100% { stroke-width: var(--sw); }
+    50% { stroke-width: calc(var(--sw) * 2.5); }
+  }
+
+  /* J10. SCATTER & REFORM */
+  .j-scatter circle { animation: jScatter 3s ease-in-out infinite; }
+  .j-scatter line { animation: jScatterLine 3s ease-in-out infinite; }
+  @keyframes jScatter {
+    0%,75%,100% { transform: translate(0,0); opacity: 1; }
+    40% { transform: translate(var(--sx),var(--sy)); opacity: 0.3; }
+  }
+  @keyframes jScatterLine {
+    0%,75%,100% { opacity: var(--base-op); }
+    35%,45% { opacity: 0; }
+  }
+
+  /* J11. J-GLOW — J letter permanently glows jade */
+  .j-glow .j-nd {
+    fill: var(--jade-bright);
+    filter: drop-shadow(0 0 3px var(--jade));
+    animation: jGlowNode 2s ease-in-out infinite;
+  }
+  .j-glow .j-ln {
+    stroke: var(--jade);
+    animation: jGlowLine 2s ease-in-out infinite;
+  }
+  .j-glow .bg-nd { fill: rgba(255,255,255,0.2); }
+  .j-glow .bg-ln { stroke-opacity: 0.08; }
+  @keyframes jGlowNode {
+    0%,100% { filter: drop-shadow(0 0 2px var(--jade)); }
+    50% { filter: drop-shadow(0 0 6px var(--jade-bright)); }
+  }
+  @keyframes jGlowLine {
+    0%,100% { stroke-opacity: 0.6; }
+    50% { stroke-opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+  }
+
+  /* J12. CONSTELLATION — dots twinkle at different rates */
+  .j-constellation circle { animation: jTwinkle var(--tw-dur) ease-in-out infinite var(--tw-del); }
+  @keyframes jTwinkle {
+    0%,100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* J13. J-PULSE — J nodes pulse larger in jade */
+  .j-pulse .j-nd {
+    animation: jPulseNode 2s ease-in-out infinite;
+  }
+  .j-pulse .bg-nd { opacity: 0.25; }
+  .j-pulse .j-ln {
+    animation: jPulseLine 2s ease-in-out infinite;
+  }
+  .j-pulse .bg-ln { stroke-opacity: 0.06; }
+  @keyframes jPulseNode {
+    0%,100% { fill: var(--jade); transform: scale(1); filter: none; }
+    50% { fill: var(--jade-bright); transform: scale(1.8); filter: drop-shadow(0 0 4px var(--jade)); }
+  }
+  @keyframes jPulseLine {
+    0%,100% { stroke: var(--jade-dim); stroke-opacity: 0.4; }
+    50% { stroke: var(--jade-bright); stroke-opacity: 1; }
+  }
+
+  /* J14. DATA FLOW — animated dashes along connections */
+  .j-dataflow line {
+    stroke-dasharray: 3 4;
+    animation: jDataFlow 1.5s linear infinite;
+  }
+  @keyframes jDataFlow {
+    from { stroke-dashoffset: 14; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* J15. J-EMERGE — icon fades in then J letter emerges */
+  .j-emerge svg { animation: jEmergeBase 4s ease-in-out infinite; }
+  .j-emerge .j-nd { animation: jEmergeJ 4s ease-in-out infinite; }
+  .j-emerge .j-ln { animation: jEmergeJLine 4s ease-in-out infinite; }
+  .j-emerge .bg-nd { animation: jEmergeBg 4s ease-in-out infinite; }
+  .j-emerge .bg-ln { animation: jEmergeBgLine 4s ease-in-out infinite; }
+  @keyframes jEmergeBase {
+    0% { opacity: 0; transform: scale(0.9); }
+    25% { opacity: 1; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes jEmergeJ {
+    0%,25% { fill: white; filter: none; }
+    50%,80% { fill: var(--jade-bright); filter: drop-shadow(0 0 5px var(--jade)); }
+    100% { fill: white; filter: none; }
+  }
+  @keyframes jEmergeJLine {
+    0%,25% { stroke: white; filter: none; }
+    50%,80% { stroke: var(--jade-bright); stroke-opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+    100% { stroke: white; filter: none; }
+  }
+  @keyframes jEmergeBg {
+    0%,25% { fill: white; }
+    50%,80% { fill: rgba(255,255,255,0.15); }
+    100% { fill: white; }
+  }
+  @keyframes jEmergeBgLine {
+    0%,25% { stroke-opacity: var(--base-op); }
+    50%,80% { stroke-opacity: 0.05; }
+    100% { stroke-opacity: var(--base-op); }
+  }
+
+  /* ===== J16-J25: J-REVEAL ANIMATIONS (J-evident weighted matrix) ===== */
+  /* New base: J-path lines heavy, J-nodes large (r=1.4), non-J very faint */
+
+  /* J16. J-HANDWRITE — stroke draws on sequentially along J path */
+  .j-handwrite .jl {
+    stroke-dasharray: 22; stroke-dashoffset: 22;
+    animation: jHWLine 6s ease-in-out infinite;
+  }
+  .j-handwrite .jn { opacity: 0; animation: jHWNode 6s ease-in-out infinite; }
+  .j-handwrite .bl, .j-handwrite .bn { opacity: 0.1; }
+  .j-handwrite .jp1  { animation-delay: 0s; }
+  .j-handwrite .jpn1 { animation-delay: 0s; }
+  .j-handwrite .jpn2 { animation-delay: 0.35s; }
+  .j-handwrite .jp2  { animation-delay: 0.45s; }
+  .j-handwrite .jpn3 { animation-delay: 0.8s; }
+  .j-handwrite .jp3  { animation-delay: 1.0s; }
+  .j-handwrite .jpn4 { animation-delay: 1.5s; }
+  .j-handwrite .jp4  { animation-delay: 1.65s; }
+  .j-handwrite .jpn6 { animation-delay: 2.1s; }
+  .j-handwrite .jp5  { animation-delay: 2.25s; }
+  .j-handwrite .jpn5 { animation-delay: 2.65s; }
+  @keyframes jHWLine {
+    0% { stroke-dashoffset: 22; }
+    8% { stroke-dashoffset: 0; stroke: var(--jade-bright); filter: drop-shadow(0 0 3px var(--jade)); }
+    18%,82% { stroke-dashoffset: 0; stroke: white; filter: none; }
+    100% { stroke-dashoffset: 22; }
+  }
+  @keyframes jHWNode {
+    0% { opacity: 0; transform: scale(0); }
+    5% { opacity: 1; transform: scale(1.8); fill: var(--jade-bright); filter: drop-shadow(0 0 5px var(--jade)); }
+    15%,82% { opacity: 1; transform: scale(1); fill: white; filter: none; }
+    100% { opacity: 0; transform: scale(0); }
+  }
+
+  /* J17. J-NEON — J flickers on like a neon tube */
+  .j-neon .bl, .j-neon .bn { opacity: 0.08; }
+  .j-neon .jl {
+    stroke: var(--jade-bright); stroke-opacity: 0;
+    animation: jNeonL 4s linear infinite;
+  }
+  .j-neon .jn {
+    fill: var(--jade-bright); opacity: 0.1;
+    animation: jNeonN 4s linear infinite;
+  }
+  @keyframes jNeonL {
+    0%,3% { stroke-opacity: 0; filter: none; }
+    4%,7% { stroke-opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+    8%,11% { stroke-opacity: 0; }
+    12%,14% { stroke-opacity: 0.6; filter: drop-shadow(0 0 2px var(--jade)); }
+    15%,18% { stroke-opacity: 0; }
+    19%,21% { stroke-opacity: 0.3; }
+    22%,24% { stroke-opacity: 0; }
+    28%,72% { stroke-opacity: 1; filter: drop-shadow(0 0 8px var(--jade-bright)); }
+    76%,78% { stroke-opacity: 0.4; }
+    80%,82% { stroke-opacity: 0.9; filter: drop-shadow(0 0 5px var(--jade)); }
+    88%,100% { stroke-opacity: 0; filter: none; }
+  }
+  @keyframes jNeonN {
+    0%,3% { opacity: 0.1; filter: none; }
+    4%,7% { opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+    8%,11% { opacity: 0.1; }
+    12%,14% { opacity: 0.6; }
+    15%,18% { opacity: 0.1; }
+    19%,21% { opacity: 0.3; }
+    22%,24% { opacity: 0.1; }
+    28%,72% { opacity: 1; filter: drop-shadow(0 0 8px var(--jade-bright)); }
+    76%,78% { opacity: 0.4; }
+    80%,82% { opacity: 0.9; }
+    88%,100% { opacity: 0.1; filter: none; }
+  }
+
+  /* J18. J-CIRCUIT — bright pulse travels along J path */
+  .j-circuit .jl { stroke-opacity: 0.2; animation: jCircL 5s ease-in-out infinite; }
+  .j-circuit .jn { opacity: 0.25; animation: jCircN 5s ease-in-out infinite; }
+  .j-circuit .bl, .j-circuit .bn { opacity: 0.06; }
+  .j-circuit .jpn1 { animation-delay: 0s; }
+  .j-circuit .jp1  { animation-delay: 0.25s; }
+  .j-circuit .jpn2 { animation-delay: 0.5s; }
+  .j-circuit .jp2  { animation-delay: 0.75s; }
+  .j-circuit .jpn3 { animation-delay: 1.0s; }
+  .j-circuit .jp3  { animation-delay: 1.25s; }
+  .j-circuit .jpn4 { animation-delay: 1.5s; }
+  .j-circuit .jp4  { animation-delay: 1.75s; }
+  .j-circuit .jpn6 { animation-delay: 2.0s; }
+  .j-circuit .jp5  { animation-delay: 2.25s; }
+  .j-circuit .jpn5 { animation-delay: 2.5s; }
+  @keyframes jCircN {
+    0%,6% { opacity: 0.25; fill: white; filter: none; transform: scale(1); }
+    10% { opacity: 1; fill: var(--jade-bright); filter: drop-shadow(0 0 8px var(--jade)); transform: scale(1.8); }
+    18%,100% { opacity: 0.25; fill: white; filter: none; transform: scale(1); }
+  }
+  @keyframes jCircL {
+    0%,6% { stroke-opacity: 0.15; stroke: white; filter: none; }
+    10% { stroke-opacity: 1; stroke: var(--jade-bright); filter: drop-shadow(0 0 6px var(--jade)); }
+    18%,100% { stroke-opacity: 0.15; stroke: white; filter: none; }
+  }
+
+  /* J19. J-DECODE — uniform grid resolves, non-J fades to reveal J */
+  .j-decode .jl { stroke-width: 1; stroke-opacity: 0.4; animation: jDecJL 5s ease-in-out infinite; }
+  .j-decode .jn { opacity: 0.4; animation: jDecJN 5s ease-in-out infinite; }
+  .j-decode .bl { stroke-width: 1; stroke-opacity: 0.4; animation: jDecBL 5s ease-in-out infinite; }
+  .j-decode .bn { opacity: 0.4; animation: jDecBN 5s ease-in-out infinite; }
+  @keyframes jDecJL {
+    0%,15% { stroke: white; stroke-opacity: 0.4; stroke-width: 1; filter: none; }
+    40%,60% { stroke: var(--jade-bright); stroke-opacity: 1; stroke-width: 2.2; filter: drop-shadow(0 0 4px var(--jade)); }
+    85%,100% { stroke: white; stroke-opacity: 0.4; stroke-width: 1; filter: none; }
+  }
+  @keyframes jDecJN {
+    0%,15% { fill: white; opacity: 0.4; transform: scale(0.75); filter: none; }
+    40%,60% { fill: var(--jade-bright); opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 5px var(--jade)); }
+    85%,100% { fill: white; opacity: 0.4; transform: scale(0.75); filter: none; }
+  }
+  @keyframes jDecBL {
+    0%,15% { stroke-opacity: 0.4; stroke-width: 1; }
+    40%,60% { stroke-opacity: 0.04; stroke-width: 0.3; }
+    85%,100% { stroke-opacity: 0.4; stroke-width: 1; }
+  }
+  @keyframes jDecBN {
+    0%,15% { opacity: 0.4; transform: scale(0.75); }
+    40%,60% { opacity: 0.06; transform: scale(0.4); }
+    85%,100% { opacity: 0.4; transform: scale(0.75); }
+  }
+
+  /* J20. J-DROP — J nodes drop in from above sequentially */
+  .j-drop .jn { opacity: 0; animation: jDropN 5.5s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+  .j-drop .jl { opacity: 0; animation: jDropL 5.5s ease-out infinite; }
+  .j-drop .bl, .j-drop .bn { opacity: 0.08; }
+  .j-drop .jpn1 { animation-delay: 0s; }
+  .j-drop .jp1  { animation-delay: 0.2s; }
+  .j-drop .jpn2 { animation-delay: 0.25s; }
+  .j-drop .jp2  { animation-delay: 0.45s; }
+  .j-drop .jpn3 { animation-delay: 0.5s; }
+  .j-drop .jp3  { animation-delay: 0.7s; }
+  .j-drop .jpn4 { animation-delay: 0.9s; }
+  .j-drop .jp4  { animation-delay: 1.1s; }
+  .j-drop .jpn6 { animation-delay: 1.3s; }
+  .j-drop .jp5  { animation-delay: 1.5s; }
+  .j-drop .jpn5 { animation-delay: 1.7s; }
+  @keyframes jDropN {
+    0%,2% { opacity: 0; transform: translateY(-18px) scale(0.5); }
+    12% { opacity: 1; transform: translateY(2px) scale(1.3); fill: var(--jade-bright); filter: drop-shadow(0 0 5px var(--jade)); }
+    20%,78% { opacity: 1; transform: translateY(0) scale(1); fill: white; filter: none; }
+    92%,100% { opacity: 0; transform: translateY(18px) scale(0.5); }
+  }
+  @keyframes jDropL {
+    0%,5% { opacity: 0; }
+    15% { opacity: 1; stroke: var(--jade-bright); filter: drop-shadow(0 0 3px var(--jade)); }
+    25%,78% { opacity: 1; stroke: white; filter: none; }
+    92%,100% { opacity: 0; }
+  }
+
+  /* J21. J-GLITCH — digital glitch resolves into J */
+  .j-glitch .bl, .j-glitch .bn { opacity: 0.06; }
+  .j-glitch svg { animation: jGltchShake 3.5s linear infinite; }
+  .j-glitch .jl { animation: jGltchL 3.5s step-end infinite; }
+  .j-glitch .jn { animation: jGltchN 3.5s step-end infinite; }
+  @keyframes jGltchShake {
+    0%,100% { transform: translate(0,0); }
+    3% { transform: translate(-2px, 1px); }
+    6% { transform: translate(2px, -1px); }
+    9%,30% { transform: translate(0,0); }
+    32% { transform: translate(1px, -2px); }
+    35% { transform: translate(-1px, 1px); }
+    38%,100% { transform: translate(0,0); }
+  }
+  @keyframes jGltchL {
+    0%,2% { stroke: white; stroke-opacity: 0.3; filter: none; }
+    3%,5% { stroke: var(--jade-bright); stroke-opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+    6%,8% { stroke: white; stroke-opacity: 0.1; }
+    9%,11% { stroke: var(--jade-dim); stroke-opacity: 0.8; }
+    12%,29% { stroke: white; stroke-opacity: 0.35; }
+    30%,32% { stroke: var(--jade-bright); stroke-opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+    33%,35% { stroke-opacity: 0; }
+    36%,38% { stroke: var(--jade-bright); stroke-opacity: 0.7; }
+    40%,85% { stroke: var(--jade-bright); stroke-opacity: 1; filter: drop-shadow(0 0 6px var(--jade-bright)); }
+    90%,100% { stroke: white; stroke-opacity: 0.2; filter: none; }
+  }
+  @keyframes jGltchN {
+    0%,2% { fill: white; opacity: 0.3; filter: none; }
+    3%,5% { fill: var(--jade-bright); opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+    6%,8% { fill: white; opacity: 0.1; }
+    9%,11% { fill: var(--jade-dim); opacity: 0.8; }
+    12%,29% { fill: white; opacity: 0.35; }
+    30%,32% { fill: var(--jade-bright); opacity: 1; filter: drop-shadow(0 0 4px var(--jade)); }
+    33%,35% { opacity: 0; }
+    36%,38% { fill: var(--jade-bright); opacity: 0.7; }
+    40%,85% { fill: var(--jade-bright); opacity: 1; filter: drop-shadow(0 0 6px var(--jade-bright)); }
+    90%,100% { fill: white; opacity: 0.2; filter: none; }
+  }
+
+  /* J22. J-BLOOM — J nodes bloom outward with scale expansion */
+  .j-bloom .bl, .j-bloom .bn { opacity: 0.1; }
+  .j-bloom .jn { animation: jBloomN 4s ease-out infinite; }
+  .j-bloom .jl { animation: jBloomL 4s ease-out infinite; }
+  .j-bloom .jpn1 { animation-delay: 0s; }
+  .j-bloom .jp1  { animation-delay: 0.06s; }
+  .j-bloom .jpn2 { animation-delay: 0.12s; }
+  .j-bloom .jp2  { animation-delay: 0.18s; }
+  .j-bloom .jpn3 { animation-delay: 0.24s; }
+  .j-bloom .jp3  { animation-delay: 0.3s; }
+  .j-bloom .jpn4 { animation-delay: 0.36s; }
+  .j-bloom .jp4  { animation-delay: 0.42s; }
+  .j-bloom .jpn6 { animation-delay: 0.48s; }
+  .j-bloom .jp5  { animation-delay: 0.54s; }
+  .j-bloom .jpn5 { animation-delay: 0.6s; }
+  @keyframes jBloomN {
+    0% { transform: scale(0); opacity: 0; }
+    15% { transform: scale(2.2); opacity: 1; fill: var(--jade-bright); filter: drop-shadow(0 0 8px var(--jade)); }
+    30%,75% { transform: scale(1); opacity: 1; fill: white; filter: none; }
+    100% { transform: scale(0); opacity: 0; }
+  }
+  @keyframes jBloomL {
+    0%,5% { stroke-opacity: 0; }
+    20% { stroke-opacity: 1; stroke: var(--jade-bright); filter: drop-shadow(0 0 4px var(--jade)); }
+    35%,75% { stroke-opacity: 1; stroke: white; filter: none; }
+    100% { stroke-opacity: 0; }
+  }
+
+  /* J23. J-PHASE — J and background breathe in opposition */
+  .j-phase .jl { animation: jPhaseJL 3s ease-in-out infinite; }
+  .j-phase .jn { animation: jPhaseJN 3s ease-in-out infinite; }
+  .j-phase .bl { animation: jPhaseBL 3s ease-in-out infinite; }
+  .j-phase .bn { animation: jPhaseBN 3s ease-in-out infinite; }
+  @keyframes jPhaseJL {
+    0%,100% { stroke: white; stroke-opacity: 0.15; filter: none; }
+    50% { stroke: var(--jade-bright); stroke-opacity: 1; filter: drop-shadow(0 0 5px var(--jade)); }
+  }
+  @keyframes jPhaseJN {
+    0%,100% { fill: white; opacity: 0.2; transform: scale(0.7); filter: none; }
+    50% { fill: var(--jade-bright); opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 5px var(--jade)); }
+  }
+  @keyframes jPhaseBL {
+    0%,100% { stroke-opacity: 0.5; stroke-width: 1.2; }
+    50% { stroke-opacity: 0.03; stroke-width: 0.3; }
+  }
+  @keyframes jPhaseBN {
+    0%,100% { opacity: 0.6; transform: scale(1.2); }
+    50% { opacity: 0.05; transform: scale(0.4); }
+  }
+
+  /* J24. J-SONAR — ripple from center lights up J path as it passes */
+  .j-sonar .bl, .j-sonar .bn { opacity: 0.06; }
+  .j-sonar .jl { stroke-opacity: 0.15; animation: jSonarL 3.5s ease-out infinite; }
+  .j-sonar .jn { opacity: 0.2; animation: jSonarN 3.5s ease-out infinite; }
+  .j-sonar .jpn4 { animation-delay: 0s; }
+  .j-sonar .jp3  { animation-delay: 0.15s; }
+  .j-sonar .jp4  { animation-delay: 0.15s; }
+  .j-sonar .jpn2 { animation-delay: 0.3s; }
+  .j-sonar .jpn6 { animation-delay: 0.3s; }
+  .j-sonar .jp1  { animation-delay: 0.4s; }
+  .j-sonar .jp5  { animation-delay: 0.4s; }
+  .j-sonar .jpn1 { animation-delay: 0.55s; }
+  .j-sonar .jp2  { animation-delay: 0.55s; }
+  .j-sonar .jpn5 { animation-delay: 0.55s; }
+  .j-sonar .jpn3 { animation-delay: 0.7s; }
+  @keyframes jSonarN {
+    0%,5% { opacity: 0.2; fill: white; filter: none; transform: scale(1); }
+    12% { opacity: 1; fill: var(--jade-bright); filter: drop-shadow(0 0 8px var(--jade)); transform: scale(2); }
+    28%,100% { opacity: 0.2; fill: white; filter: none; transform: scale(1); }
+  }
+  @keyframes jSonarL {
+    0%,5% { stroke-opacity: 0.15; stroke: white; filter: none; }
+    12% { stroke-opacity: 1; stroke: var(--jade-bright); filter: drop-shadow(0 0 6px var(--jade)); stroke-width: 3; }
+    28%,100% { stroke-opacity: 0.15; stroke: white; filter: none; }
+  }
+
+  /* J25. J-FORGE — J elements glow hot then cool to solid white */
+  .j-forge .bl, .j-forge .bn { opacity: 0.06; }
+  .j-forge .jl { animation: jForgeL 4.5s ease-in-out infinite; }
+  .j-forge .jn { animation: jForgeN 4.5s ease-in-out infinite; }
+  .j-forge .jp1 { animation-delay: 0s; }
+  .j-forge .jp2 { animation-delay: 0.2s; }
+  .j-forge .jp3 { animation-delay: 0.5s; }
+  .j-forge .jp4 { animation-delay: 0.8s; }
+  .j-forge .jp5 { animation-delay: 1.1s; }
+  .j-forge .jpn1 { animation-delay: 0s; }
+  .j-forge .jpn2 { animation-delay: 0.15s; }
+  .j-forge .jpn3 { animation-delay: 0.3s; }
+  .j-forge .jpn4 { animation-delay: 0.55s; }
+  .j-forge .jpn6 { animation-delay: 0.85s; }
+  .j-forge .jpn5 { animation-delay: 1.15s; }
+  @keyframes jForgeL {
+    0%,5% { stroke: white; stroke-opacity: 0.1; filter: none; }
+    15% { stroke: #fff8e1; stroke-opacity: 1; filter: drop-shadow(0 0 8px #fbbf24) drop-shadow(0 0 4px var(--jade)); stroke-width: 3; }
+    30% { stroke: var(--jade-bright); stroke-opacity: 1; filter: drop-shadow(0 0 5px var(--jade)); }
+    50%,80% { stroke: white; stroke-opacity: 0.9; filter: none; }
+    100% { stroke: white; stroke-opacity: 0.1; filter: none; }
+  }
+  @keyframes jForgeN {
+    0%,5% { fill: white; opacity: 0.15; filter: none; transform: scale(0.8); }
+    15% { fill: #fff8e1; opacity: 1; filter: drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 5px var(--jade)); transform: scale(2); }
+    30% { fill: var(--jade-bright); opacity: 1; filter: drop-shadow(0 0 5px var(--jade)); transform: scale(1.3); }
+    50%,80% { fill: white; opacity: 1; filter: none; transform: scale(1); }
+    100% { fill: white; opacity: 0.15; filter: none; transform: scale(0.8); }
+  }
+
+  /* ============================================
+     TAB 3: LATTICE ICON ANIMATIONS
+     Pentagon with internal lattice lines (stroke-only)
+     ============================================ */
+
+  .l-icon { width: 64px; height: 64px; display: block; }
+
+  /* L1. Pulse */
+  .l-pulse .l-icon { animation: lPulse 1.6s ease-in-out infinite; }
+  @keyframes lPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+  /* L2. Spin */
+  .l-spin .l-icon { animation: lSpin 1.8s linear infinite; }
+  @keyframes lSpin { to{transform:rotate(360deg)} }
+
+  /* L3. Bounce */
+  .l-bounce .l-icon { animation: lBounce 1.2s ease-in-out infinite; }
+  @keyframes lBounce {
+    0%,100%{transform:translateY(0) scaleY(1) scaleX(1)}
+    30%{transform:translateY(-14px) scaleY(1.06) scaleX(.96)}
+    50%{transform:translateY(0) scaleY(.88) scaleX(1.08)}
+    65%{transform:translateY(-6px) scaleY(1.03) scaleX(.98)}
+    80%{transform:translateY(0) scaleY(.96) scaleX(1.03)}
+  }
+
+  /* L4. Fade Pulse */
+  .l-fade .l-icon { animation: lFade 1.8s ease-in-out infinite; }
+  @keyframes lFade { 0%,100%{opacity:1} 50%{opacity:.12} }
+
+  /* L5. 3D Flip X */
+  .l-flipx { perspective: 200px; }
+  .l-flipx .l-icon { animation: lFlipX 2s ease-in-out infinite; }
+  @keyframes lFlipX { 0%{transform:rotateX(0)} 50%{transform:rotateX(180deg)} 100%{transform:rotateX(360deg)} }
+
+  /* L6. 3D Flip Y */
+  .l-flipy { perspective: 200px; }
+  .l-flipy .l-icon { animation: lFlipY 2s ease-in-out infinite; }
+  @keyframes lFlipY { 0%{transform:rotateY(0)} 50%{transform:rotateY(180deg)} 100%{transform:rotateY(360deg)} }
+
+  /* L7. Draw-on (stroke reveal) */
+  .l-draw .l-icon path {
+    stroke: white;
+    stroke-dasharray: 120;
+    stroke-dashoffset: 120;
+    animation: lDraw 2.8s ease-in-out infinite;
+  }
+  .l-draw .l-icon .lp2 { animation-delay: .15s; }
+  .l-draw .l-icon .lp3 { animation-delay: .30s; }
+  .l-draw .l-icon .lp4 { animation-delay: .45s; }
+  .l-draw .l-icon .lp5 { animation-delay: .60s; }
+  @keyframes lDraw {
+    0% { stroke-dashoffset: 120; }
+    50%,75% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -120; }
+  }
+
+  /* L8. Edge Cascade */
+  .l-cascade .l-icon path { animation: lCascade 2.2s ease-in-out infinite; }
+  .l-cascade .lp1 { animation-delay: 0s; }
+  .l-cascade .lp2 { animation-delay: .25s; }
+  .l-cascade .lp3 { animation-delay: .50s; }
+  .l-cascade .lp4 { animation-delay: .75s; }
+  .l-cascade .lp5 { animation-delay: 1.0s; }
+  @keyframes lCascade {
+    0%,8%{opacity:.08} 25%,55%{opacity:1} 80%,100%{opacity:.08}
+  }
+
+  /* L9. Glow Pulse */
+  .l-glow .l-icon { animation: lGlow 2s ease-in-out infinite; }
+  @keyframes lGlow {
+    0%,100%{filter:drop-shadow(0 0 2px rgba(255,255,255,.25))}
+    50%{filter:drop-shadow(0 0 10px rgba(255,255,255,.85)) drop-shadow(0 0 22px rgba(255,255,255,.35))}
+  }
+
+  /* L10. Orbit */
+  .l-orbit .l-icon { animation: lOrbit 2.2s linear infinite; }
+  @keyframes lOrbit {
+    0%{transform:rotate(0deg) translateX(10px) rotate(0deg)}
+    100%{transform:rotate(360deg) translateX(10px) rotate(-360deg)}
+  }
+
+  /* L11. Shake */
+  .l-shake .l-icon { animation: lShake .8s ease-in-out infinite; }
+  @keyframes lShake {
+    0%,100%{transform:translateX(0)}
+    10%{transform:translateX(-4px)} 20%{transform:translateX(4px)}
+    30%{transform:translateX(-4px)} 40%{transform:translateX(4px)}
+    50%{transform:translateX(-3px)} 60%{transform:translateX(3px)}
+    70%{transform:translateX(-2px)} 80%{transform:translateX(2px)}
+    90%{transform:translateX(-1px)}
+  }
+
+  /* L12. Morph Scale */
+  .l-morph .l-icon { animation: lMorph 2s ease-in-out infinite; }
+  @keyframes lMorph {
+    0%,100%{transform:scaleX(1) scaleY(1)}
+    25%{transform:scaleX(1.25) scaleY(.8)}
+    50%{transform:scaleX(.8) scaleY(1.25)}
+    75%{transform:scaleX(1.15) scaleY(.9)}
+  }
+
+  /* L13. Pendulum */
+  .l-pendulum .l-icon {
+    transform-origin: top center;
+    animation: lPendulum 1.6s ease-in-out infinite;
+  }
+  @keyframes lPendulum {
+    0%,100%{transform:rotate(0deg)} 25%{transform:rotate(18deg)} 75%{transform:rotate(-18deg)}
+  }
+
+  /* L14. Ripple */
+  .l-ripple { position: relative; }
+  .l-ripple .ripple-ring {
+    position: absolute;
+    width: 56px; height: 56px;
+    border: 1.5px solid rgba(255,255,255,.4);
+    border-radius: 50%;
+    opacity: 0;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) scale(1);
+    pointer-events: none;
+  }
+  .l-ripple .ripple-ring:nth-child(1) { animation: lRipple 2s ease-out infinite; }
+  .l-ripple .ripple-ring:nth-child(2) { animation: lRipple 2s ease-out .5s infinite; }
+  .l-ripple .ripple-ring:nth-child(3) { animation: lRipple 2s ease-out 1s infinite; }
+  @keyframes lRipple {
+    0%{transform:translate(-50%,-50%) scale(.7);opacity:.65}
+    100%{transform:translate(-50%,-50%) scale(2.5);opacity:0}
+  }
+
+  /* L15. Heartbeat */
+  .l-heartbeat .l-icon { animation: lHeartbeat 1.4s ease-in-out infinite; }
+  @keyframes lHeartbeat {
+    0%,100%{transform:scale(1)}
+    14%{transform:scale(1.18)} 28%{transform:scale(1)}
+    42%{transform:scale(1.12)} 56%{transform:scale(1)}
+  }
+
+  /* ============================================
+     L16–25: LINE-LEVEL LATTICE ANIMATIONS
+     lp1 = pentagon outline (~86 path length)
+     lp2 = vertical center line (~27)
+     lp3 = horizontal center line (~27)
+     lp4 = diagonal BL→R (~25)
+     lp5 = diagonal BR→L (~25)
+     ============================================ */
+
+  /* L16. STAGGER REVEAL — lines appear one at a time */
+  .l-stagger-reveal path {
+    animation: lStaggerReveal 3s ease-in-out infinite;
+  }
+  .l-stagger-reveal .lp1 { animation-delay: 0s; }
+  .l-stagger-reveal .lp2 { animation-delay: 0.4s; }
+  .l-stagger-reveal .lp3 { animation-delay: 0.8s; }
+  .l-stagger-reveal .lp4 { animation-delay: 1.2s; }
+  .l-stagger-reveal .lp5 { animation-delay: 1.6s; }
+  @keyframes lStaggerReveal {
+    0%,15% { stroke-opacity: 0; }
+    25%,60% { stroke-opacity: 1; }
+    80%,100% { stroke-opacity: 0; }
+  }
+
+  /* L17. LINE PULSE — each path breathes at its own rhythm */
+  .l-line-pulse .lp1 { animation: lLinePulse 2.4s ease-in-out infinite 0s; }
+  .l-line-pulse .lp2 { animation: lLinePulse 1.8s ease-in-out infinite 0.2s; }
+  .l-line-pulse .lp3 { animation: lLinePulse 2.1s ease-in-out infinite 0.5s; }
+  .l-line-pulse .lp4 { animation: lLinePulse 1.6s ease-in-out infinite 0.3s; }
+  .l-line-pulse .lp5 { animation: lLinePulse 1.9s ease-in-out infinite 0.7s; }
+  @keyframes lLinePulse {
+    0%,100% { stroke-opacity: 0.15; }
+    50% { stroke-opacity: 1; }
+  }
+
+  /* L18. STROKE CHASE — dashes run along each path */
+  .l-stroke-chase path {
+    stroke-dasharray: 6 5;
+    animation: lStrokeChase 2s linear infinite;
+  }
+  .l-stroke-chase .lp1 { stroke-dasharray: 8 6; animation-duration: 3s; }
+  .l-stroke-chase .lp4 { animation-direction: reverse; }
+  .l-stroke-chase .lp5 { animation-direction: reverse; }
+  @keyframes lStrokeChase {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -22; }
+  }
+
+  /* L19. SKELETON BUILD — pentagon draws, then internals extend */
+  .l-skeleton path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: lSkeletonDraw 3.5s ease-in-out infinite;
+  }
+  .l-skeleton .lp1 { stroke-dasharray: 90; stroke-dashoffset: 90; animation-delay: 0s; }
+  .l-skeleton .lp2 { animation-delay: 0.6s; }
+  .l-skeleton .lp3 { animation-delay: 0.9s; }
+  .l-skeleton .lp4 { animation-delay: 1.2s; }
+  .l-skeleton .lp5 { animation-delay: 1.5s; }
+  @keyframes lSkeletonDraw {
+    0% { stroke-dashoffset: 100; stroke-opacity: 0.3; }
+    30%,65% { stroke-dashoffset: 0; stroke-opacity: 1; }
+    100% { stroke-dashoffset: -100; stroke-opacity: 0.3; }
+  }
+
+  /* L20. BREATHING WEIGHTS — stroke widths oscillate independently */
+  .l-breathe-weight .lp1 { animation: lBreathW 2.5s ease-in-out infinite 0s; }
+  .l-breathe-weight .lp2 { animation: lBreathW 2s ease-in-out infinite 0.3s; }
+  .l-breathe-weight .lp3 { animation: lBreathW 2.2s ease-in-out infinite 0.6s; }
+  .l-breathe-weight .lp4 { animation: lBreathW 1.8s ease-in-out infinite 0.15s; }
+  .l-breathe-weight .lp5 { animation: lBreathW 2.3s ease-in-out infinite 0.45s; }
+  @keyframes lBreathW {
+    0%,100% { stroke-width: 1; }
+    50% { stroke-width: 3.5; }
+  }
+
+  /* L21. INNER/OUTER — pentagon + internals pulse in opposition */
+  .l-inner-outer .lp1 { animation: lOuterPulse 2s ease-in-out infinite; }
+  .l-inner-outer .lp2,
+  .l-inner-outer .lp3,
+  .l-inner-outer .lp4,
+  .l-inner-outer .lp5 { animation: lInnerPulse 2s ease-in-out infinite; }
+  @keyframes lOuterPulse {
+    0%,100% { stroke-opacity: 1; stroke-width: 2.5; }
+    50% { stroke-opacity: 0.15; stroke-width: 1; }
+  }
+  @keyframes lInnerPulse {
+    0%,100% { stroke-opacity: 0.15; stroke-width: 1; }
+    50% { stroke-opacity: 1; stroke-width: 2.5; }
+  }
+
+  /* L22. CROSS SWEEP — diagonals alternate, spine/bar steady */
+  .l-cross-sweep .lp1 { stroke-opacity: 0.3; }
+  .l-cross-sweep .lp2,
+  .l-cross-sweep .lp3 { stroke-opacity: 0.4; }
+  .l-cross-sweep .lp4 { animation: lCrossSweepA 2s ease-in-out infinite; }
+  .l-cross-sweep .lp5 { animation: lCrossSweepB 2s ease-in-out infinite; }
+  @keyframes lCrossSweepA {
+    0%,100% { stroke-opacity: 1; stroke-width: 3; }
+    50% { stroke-opacity: 0.1; stroke-width: 1; }
+  }
+  @keyframes lCrossSweepB {
+    0%,100% { stroke-opacity: 0.1; stroke-width: 1; }
+    50% { stroke-opacity: 1; stroke-width: 3; }
+  }
+
+  /* L23. LINE CASCADE GLOW — each path gets a white glow in sequence */
+  .l-cascade-glow path {
+    animation: lCascadeGlow 3s ease-in-out infinite;
+  }
+  .l-cascade-glow .lp1 { animation-delay: 0s; }
+  .l-cascade-glow .lp2 { animation-delay: 0.5s; }
+  .l-cascade-glow .lp3 { animation-delay: 1.0s; }
+  .l-cascade-glow .lp4 { animation-delay: 1.5s; }
+  .l-cascade-glow .lp5 { animation-delay: 2.0s; }
+  @keyframes lCascadeGlow {
+    0%,20%,100% { filter: none; stroke-opacity: 0.3; }
+    10% { filter: drop-shadow(0 0 4px white) drop-shadow(0 0 8px rgba(255,255,255,0.5)); stroke-opacity: 1; }
+  }
+
+  /* L24. COUNTER FLOW — dashes flow in opposite directions on mirrored paths */
+  .l-counter-flow path {
+    stroke-dasharray: 4 6;
+  }
+  .l-counter-flow .lp1 { stroke-dasharray: 6 8; animation: lFlowFwd 4s linear infinite; }
+  .l-counter-flow .lp2 { animation: lFlowFwd 1.5s linear infinite; }
+  .l-counter-flow .lp3 { animation: lFlowRev 1.5s linear infinite; }
+  .l-counter-flow .lp4 { animation: lFlowFwd 2s linear infinite; }
+  .l-counter-flow .lp5 { animation: lFlowRev 2s linear infinite; }
+  @keyframes lFlowFwd { from{stroke-dashoffset:0} to{stroke-dashoffset:-20} }
+  @keyframes lFlowRev { from{stroke-dashoffset:0} to{stroke-dashoffset:20} }
+
+  /* L25. DECONSTRUCT/RECONSTRUCT — lines pull apart then snap back */
+  .l-deconstruct .lp1 { animation: lDeconP1 3s ease-in-out infinite; }
+  .l-deconstruct .lp2 { animation: lDeconP2 3s ease-in-out infinite; }
+  .l-deconstruct .lp3 { animation: lDeconP3 3s ease-in-out infinite; }
+  .l-deconstruct .lp4 { animation: lDeconP4 3s ease-in-out infinite; }
+  .l-deconstruct .lp5 { animation: lDeconP5 3s ease-in-out infinite; }
+  @keyframes lDeconP1 {
+    0%,70%,100% { transform: translate(0,0) scale(1); opacity: 1; }
+    35% { transform: translate(0,-3px) scale(1.06); opacity: 0.5; }
+  }
+  @keyframes lDeconP2 {
+    0%,70%,100% { transform: translate(0,0); opacity: 1; }
+    35% { transform: translate(0,4px); opacity: 0.4; }
+  }
+  @keyframes lDeconP3 {
+    0%,70%,100% { transform: translate(0,0); opacity: 1; }
+    35% { transform: translate(0,-4px); opacity: 0.4; }
+  }
+  @keyframes lDeconP4 {
+    0%,70%,100% { transform: translate(0,0); opacity: 1; }
+    35% { transform: translate(3px,2px); opacity: 0.4; }
+  }
+  @keyframes lDeconP5 {
+    0%,70%,100% { transform: translate(0,0); opacity: 1; }
+    35% { transform: translate(-3px,2px); opacity: 0.4; }
+  }
+
+  .badge {
+    display: inline-block;
+    background: #2a2a2a;
+    color: #999;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  /* ============================================
+     TAB 4: THE EYE ANIMATIONS
+     Eye icon — eyelid ring, iris circle, pupil highlight
+     ============================================ */
+
+  .eye-icon { width: 64px; height: auto; display: block; }
+
+  /* E1. Pulse */
+  .e-pulse .eye-icon { animation: ePulse 1.6s ease-in-out infinite; }
+  @keyframes ePulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.22)} }
+
+  /* E2. Spin */
+  .e-spin .eye-icon { animation: eSpin 1.8s linear infinite; }
+  @keyframes eSpin { to{transform:rotate(360deg)} }
+
+  /* E3. Bounce */
+  .e-bounce .eye-icon { animation: eBounce 1.2s ease-in-out infinite; }
+  @keyframes eBounce {
+    0%,100%{transform:translateY(0) scaleY(1) scaleX(1)}
+    30%{transform:translateY(-14px) scaleY(1.06) scaleX(.96)}
+    50%{transform:translateY(0) scaleY(.88) scaleX(1.08)}
+    65%{transform:translateY(-6px) scaleY(1.03) scaleX(.98)}
+    80%{transform:translateY(0) scaleY(.96) scaleX(1.03)}
+  }
+
+  /* E4. Fade Pulse */
+  .e-fade .eye-icon { animation: eFade 1.8s ease-in-out infinite; }
+  @keyframes eFade { 0%,100%{opacity:1} 50%{opacity:.12} }
+
+  /* E5. 3D Flip X */
+  .e-flipx { perspective: 200px; }
+  .e-flipx .eye-icon { animation: eFlipX 2s ease-in-out infinite; }
+  @keyframes eFlipX { 0%{transform:rotateX(0)} 50%{transform:rotateX(180deg)} 100%{transform:rotateX(360deg)} }
+
+  /* E6. 3D Flip Y */
+  .e-flipy { perspective: 200px; }
+  .e-flipy .eye-icon { animation: eFlipY 2s ease-in-out infinite; }
+  @keyframes eFlipY { 0%{transform:rotateY(0)} 50%{transform:rotateY(180deg)} 100%{transform:rotateY(360deg)} }
+
+  /* E7. Draw-on */
+  .e-draw .eye-icon path {
+    fill: white; fill-opacity: 0; stroke: white; stroke-width: .5;
+    stroke-dasharray: 250;
+    animation: eDrawStroke 2.8s ease-in-out infinite;
+  }
+  .e-draw .eye-icon path:nth-child(2) { animation-delay: .35s; }
+  @keyframes eDrawStroke {
+    0%{stroke-dashoffset:250;fill-opacity:0}
+    65%{fill-opacity:0}
+    85%{stroke-dashoffset:0;fill-opacity:0}
+    100%{stroke-dashoffset:0;fill-opacity:1}
+  }
+
+  /* E8. Edge Cascade */
+  .e-cascade .eye-icon .ep1 { animation: eCascadeIn 2.2s ease-in-out infinite; }
+  .e-cascade .eye-icon .ep2 { animation: eCascadeIn 2.2s ease-in-out .35s infinite; }
+  .e-cascade .eye-icon .ep3 { animation: eCascadeIn 2.2s ease-in-out .7s infinite; }
+  @keyframes eCascadeIn {
+    0%,8%{opacity:.08} 25%,55%{opacity:1} 80%,100%{opacity:.08}
+  }
+
+  /* E9. Glow Pulse */
+  .e-glow .eye-icon { animation: eGlowPulse 2s ease-in-out infinite; }
+  @keyframes eGlowPulse {
+    0%,100%{filter:drop-shadow(0 0 2px rgba(255,255,255,.25))}
+    50%{filter:drop-shadow(0 0 10px rgba(255,255,255,.85)) drop-shadow(0 0 22px rgba(255,255,255,.35))}
+  }
+
+  /* E10. Orbit */
+  .e-orbit .eye-icon { animation: eOrbit 2.2s linear infinite; }
+  @keyframes eOrbit {
+    0%{transform:rotate(0deg) translateX(10px) rotate(0deg)}
+    100%{transform:rotate(360deg) translateX(10px) rotate(-360deg)}
+  }
+
+  /* E11. Shake */
+  .e-shake .eye-icon { animation: eShake .8s ease-in-out infinite; }
+  @keyframes eShake {
+    0%,100%{transform:translateX(0)}
+    10%{transform:translateX(-4px)} 20%{transform:translateX(4px)}
+    30%{transform:translateX(-4px)} 40%{transform:translateX(4px)}
+    50%{transform:translateX(-3px)} 60%{transform:translateX(3px)}
+    70%{transform:translateX(-2px)} 80%{transform:translateX(2px)}
+    90%{transform:translateX(-1px)}
+  }
+
+  /* E12. Morph Scale */
+  .e-morph .eye-icon { animation: eMorphScale 2s ease-in-out infinite; }
+  @keyframes eMorphScale {
+    0%,100%{transform:scaleX(1) scaleY(1)}
+    25%{transform:scaleX(1.25) scaleY(.8)}
+    50%{transform:scaleX(.8) scaleY(1.25)}
+    75%{transform:scaleX(1.15) scaleY(.9)}
+  }
+
+  /* E13. Pendulum */
+  .e-pendulum .eye-icon {
+    transform-origin: top center;
+    animation: ePendulum 1.6s ease-in-out infinite;
+  }
+  @keyframes ePendulum {
+    0%,100%{transform:rotate(0deg)} 25%{transform:rotate(18deg)} 75%{transform:rotate(-18deg)}
+  }
+
+  /* E14. Ripple */
+  .e-ripple { position: relative; }
+  .e-ripple .eye-ring {
+    position: absolute;
+    width: 64px; height: 28px;
+    border: 1.5px solid rgba(255,255,255,.5);
+    border-radius: 50%;
+    opacity: 0;
+    top: 50%; left: 50%;
+    margin-top: -6px;
+    transform: translate(-50%,-50%) scale(1);
+    pointer-events: none;
+  }
+  .e-ripple .eye-ring:nth-child(1) { animation: eRipple 2s ease-out infinite; }
+  .e-ripple .eye-ring:nth-child(2) { animation: eRipple 2s ease-out .5s infinite; }
+  .e-ripple .eye-ring:nth-child(3) { animation: eRipple 2s ease-out 1s infinite; }
+  @keyframes eRipple {
+    0%{transform:translate(-50%,-50%) scale(.7);opacity:.65}
+    100%{transform:translate(-50%,-50%) scale(2.8);opacity:0}
+  }
+
+  /* E15. Color Shift */
+  .e-color .eye-icon .ep1 { animation: eColorA 3s ease-in-out infinite; }
+  .e-color .eye-icon .ep2 { animation: eColorB 3s ease-in-out infinite; }
+  .e-color .eye-icon .ep3 { fill: #1a1a1a !important; }
+  @keyframes eColorA {
+    0%,100%{fill:white} 25%{fill:#b8ffe4} 50%{fill:#00c9a7} 75%{fill:#7affcf}
+  }
+  @keyframes eColorB {
+    0%,100%{fill:white} 25%{fill:#7affcf} 50%{fill:#b8ffe4} 75%{fill:#00c9a7}
+  }
+
+  /* ============================================
+     TAB 5: CONVERGENCE ANIMATIONS
+     7 lines converging to a center circle
+     ============================================ */
+
+  .cv-icon { width: 64px; height: 64px; display: block; }
+  .cv-icon path { transform-origin: 16px 16px; }
+
+  /* C1. CONVERGE — all lines draw inward simultaneously */
+  .c-converge .cv {
+    stroke-dasharray: 20; stroke-dashoffset: 20;
+    animation: cvDrawIn 3.5s ease-in-out infinite;
+  }
+  .c-converge .cvc {
+    opacity: 0; transform: scale(0);
+    animation: cvCenterIn 3.5s ease-in-out infinite;
+  }
+  @keyframes cvDrawIn {
+    0% { stroke-dashoffset: 20; }
+    40%,75% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 20; }
+  }
+  @keyframes cvCenterIn {
+    0%,35% { opacity: 0; transform: scale(0); }
+    45%,75% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,255,255,0.6)); }
+    100% { opacity: 0; transform: scale(0); }
+  }
+
+  /* C2. GATHER — lines draw inward one-by-one clockwise */
+  .c-gather .cv {
+    stroke-dasharray: 20; stroke-dashoffset: 20;
+    animation: cvDrawIn 5s ease-in-out infinite;
+  }
+  .c-gather .cvc { opacity: 0; transform: scale(0); animation: cvCenterIn 5s ease-in-out infinite; animation-delay: 2.1s; }
+  .c-gather .cv1 { animation-delay: 0s; }
+  .c-gather .cv2 { animation-delay: 0.3s; }
+  .c-gather .cv3 { animation-delay: 0.6s; }
+  .c-gather .cv5 { animation-delay: 0.9s; }
+  .c-gather .cv7 { animation-delay: 1.2s; }
+  .c-gather .cv6 { animation-delay: 1.5s; }
+  .c-gather .cv4 { animation-delay: 1.8s; }
+
+  /* C3. GRAVITY — lines pulled inward from scattered positions */
+  .c-gravity .cv { animation: cvGravity 4s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+  .c-gravity .cvc { animation: cvGravityCenter 4s ease-in-out infinite; }
+  .c-gravity .cv1 { --dx: -6px; --dy: -6px; }
+  .c-gravity .cv2 { --dx: 0px; --dy: -8px; }
+  .c-gravity .cv3 { --dx: 6px; --dy: -6px; }
+  .c-gravity .cv4 { --dx: -8px; --dy: 0px; }
+  .c-gravity .cv5 { --dx: 8px; --dy: 0px; }
+  .c-gravity .cv6 { --dx: -5px; --dy: 6px; }
+  .c-gravity .cv7 { --dx: 5px; --dy: 6px; }
+  @keyframes cvGravity {
+    0%,5% { transform: translate(var(--dx), var(--dy)); opacity: 0.3; }
+    30%,75% { transform: translate(0,0); opacity: 1; }
+    95%,100% { transform: translate(var(--dx), var(--dy)); opacity: 0.3; }
+  }
+  @keyframes cvGravityCenter {
+    0%,25% { transform: scale(0); opacity: 0; }
+    35%,75% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 6px rgba(255,255,255,0.5)); }
+    95%,100% { transform: scale(0); opacity: 0; }
+  }
+
+  /* C4. PULSE INWARD — brightness pulse travels from tips to center */
+  .c-pulse-in .cv { stroke-opacity: 0.2; animation: cvPulseIn 3s ease-in-out infinite; }
+  .c-pulse-in .cvc { animation: cvPulseCenter 3s ease-in-out infinite; }
+  .c-pulse-in .cv1 { animation-delay: 0s; }
+  .c-pulse-in .cv2 { animation-delay: 0.15s; }
+  .c-pulse-in .cv3 { animation-delay: 0.3s; }
+  .c-pulse-in .cv4 { animation-delay: 0.1s; }
+  .c-pulse-in .cv5 { animation-delay: 0.2s; }
+  .c-pulse-in .cv6 { animation-delay: 0.05s; }
+  .c-pulse-in .cv7 { animation-delay: 0.25s; }
+  @keyframes cvPulseIn {
+    0%,15% { stroke-opacity: 0.2; filter: none; }
+    30% { stroke-opacity: 1; filter: drop-shadow(0 0 4px rgba(255,255,255,0.7)); }
+    50%,100% { stroke-opacity: 0.2; filter: none; }
+  }
+  @keyframes cvPulseCenter {
+    0%,40% { transform: scale(1); filter: none; }
+    50% { transform: scale(1.5); filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
+    65%,100% { transform: scale(1); filter: none; }
+  }
+
+  /* C5. FLOW — animated dashes stream inward continuously */
+  .c-flow .cv { stroke-dasharray: 4 5; animation: cvFlow 1.8s linear infinite; }
+  .c-flow .cvc { animation: cvFlowCenter 1.8s ease-in-out infinite; }
+  @keyframes cvFlow {
+    from { stroke-dashoffset: 18; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes cvFlowCenter {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.15); filter: drop-shadow(0 0 3px rgba(255,255,255,0.4)); }
+  }
+
+  /* C6. BREATHE — lines oscillate between diverged and converged */
+  .c-breathe .cv { stroke-dasharray: 20; animation: cvBreathe 3s ease-in-out infinite; }
+  .c-breathe .cvc { animation: cvBreatheCenter 3s ease-in-out infinite; }
+  @keyframes cvBreathe {
+    0%,100% { stroke-dashoffset: 0; }
+    50% { stroke-dashoffset: 12; }
+  }
+  @keyframes cvBreatheCenter {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.3); opacity: 0.3; }
+  }
+
+  /* C7. COLLAPSE — icon starts expanded, collapses to convergence */
+  .c-collapse .cv-icon { animation: cvCollapse 3s ease-in-out infinite; }
+  @keyframes cvCollapse {
+    0% { transform: scale(1.8); opacity: 0.2; }
+    35%,70% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0.2; }
+  }
+
+  /* C8. FOCUS — brightness drains from lines into center */
+  .c-focus .cv { animation: cvFocus 3.5s ease-in-out infinite; }
+  .c-focus .cvc { animation: cvFocusCenter 3.5s ease-in-out infinite; }
+  .c-focus .cv1 { animation-delay: 0s; }
+  .c-focus .cv3 { animation-delay: 0.05s; }
+  .c-focus .cv2 { animation-delay: 0.15s; }
+  .c-focus .cv4 { animation-delay: 0.1s; }
+  .c-focus .cv5 { animation-delay: 0.1s; }
+  .c-focus .cv6 { animation-delay: 0.05s; }
+  .c-focus .cv7 { animation-delay: 0.05s; }
+  @keyframes cvFocus {
+    0%,10% { stroke-opacity: 0.9; stroke-width: 2; filter: none; }
+    45%,55% { stroke-opacity: 0.12; stroke-width: 1; }
+    100% { stroke-opacity: 0.9; stroke-width: 2; filter: none; }
+  }
+  @keyframes cvFocusCenter {
+    0%,10% { transform: scale(1); filter: none; }
+    45%,55% { transform: scale(2.2); filter: drop-shadow(0 0 10px white) drop-shadow(0 0 20px rgba(255,255,255,0.5)); }
+    100% { transform: scale(1); filter: none; }
+  }
+
+  /* C9. RADAR — rotational sweep lights each line in sequence */
+  .c-radar .cv { stroke-opacity: 0.12; animation: cvRadar 3s ease-in-out infinite; }
+  .c-radar .cvc { opacity: 0.4; animation: cvRadarCenter 3s ease-in-out infinite; }
+  .c-radar .cv2 { animation-delay: 0s; }
+  .c-radar .cv3 { animation-delay: 0.43s; }
+  .c-radar .cv5 { animation-delay: 0.86s; }
+  .c-radar .cv7 { animation-delay: 1.29s; }
+  .c-radar .cv6 { animation-delay: 1.72s; }
+  .c-radar .cv4 { animation-delay: 2.15s; }
+  .c-radar .cv1 { animation-delay: 2.58s; }
+  @keyframes cvRadar {
+    0%,8% { stroke-opacity: 0.12; filter: none; }
+    14% { stroke-opacity: 1; filter: drop-shadow(0 0 5px rgba(255,255,255,0.7)); }
+    22%,100% { stroke-opacity: 0.12; filter: none; }
+  }
+  @keyframes cvRadarCenter {
+    0%,100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 4px white); }
+  }
+
+  /* C10. PINCH — lines retract toward center then spring back */
+  .c-pinch .cv { stroke-dasharray: 20; animation: cvPinch 2.5s ease-in-out infinite; }
+  .c-pinch .cvc { animation: cvPinchCenter 2.5s ease-in-out infinite; }
+  @keyframes cvPinch {
+    0%,100% { stroke-dashoffset: 0; }
+    40%,50% { stroke-dashoffset: 14; }
+  }
+  @keyframes cvPinchCenter {
+    0%,100% { transform: scale(1); filter: none; }
+    40%,50% { transform: scale(1.8); filter: drop-shadow(0 0 6px rgba(255,255,255,0.6)); }
+  }
+
+  /* C11. ASSEMBLY — center appears, lines grow outward one by one */
+  .c-assembly .cv { opacity: 0; animation: cvAssembly 5s ease-out infinite; }
+  .c-assembly .cvc { animation: cvAssemblyCenter 5s ease-out infinite; }
+  .c-assembly .cv1 { animation-delay: 0.4s; }
+  .c-assembly .cv2 { animation-delay: 0.7s; }
+  .c-assembly .cv3 { animation-delay: 1.0s; }
+  .c-assembly .cv5 { animation-delay: 1.3s; }
+  .c-assembly .cv7 { animation-delay: 1.6s; }
+  .c-assembly .cv6 { animation-delay: 1.9s; }
+  .c-assembly .cv4 { animation-delay: 2.2s; }
+  @keyframes cvAssembly {
+    0%,3% { opacity: 0; transform: scale(0); }
+    12% { opacity: 1; transform: scale(1.15); }
+    22%,78% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0); }
+  }
+  @keyframes cvAssemblyCenter {
+    0% { transform: scale(0); opacity: 0; }
+    8%,78% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+  }
+
+  /* C12. TREMOR — chaotic vibration resolves into stable convergence */
+  .c-tremor .cv-icon { animation: cvTremor 3.5s ease-out infinite; }
+  .c-tremor .cv { stroke-opacity: 0.3; animation: cvTremorFade 3.5s ease-out infinite; }
+  .c-tremor .cvc { opacity: 0; animation: cvTremorCenter 3.5s ease-out infinite; }
+  @keyframes cvTremor {
+    0% { transform: translate(-2px,1px) rotate(-2deg); }
+    5% { transform: translate(2px,-1px) rotate(2deg); }
+    10% { transform: translate(-1px,-1px) rotate(-1.5deg); }
+    15% { transform: translate(1px,1px) rotate(1deg); }
+    20% { transform: translate(-0.5px,0.5px) rotate(-0.5deg); }
+    25% { transform: translate(0.3px,-0.3px) rotate(0.3deg); }
+    30%,80% { transform: translate(0,0) rotate(0deg); }
+    90% { transform: translate(-1px,0.5px) rotate(-1deg); }
+    100% { transform: translate(-2px,1px) rotate(-2deg); }
+  }
+  @keyframes cvTremorFade {
+    0%,20% { stroke-opacity: 0.3; }
+    35%,80% { stroke-opacity: 1; }
+    95%,100% { stroke-opacity: 0.3; }
+  }
+  @keyframes cvTremorCenter {
+    0%,25% { opacity: 0; transform: scale(0); }
+    35%,80% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
+    95%,100% { opacity: 0; transform: scale(0); }
+  }
+
+  /* C13. SETTLE — rotation decelerates to equilibrium */
+  .c-settle .cv-icon { animation: cvSettle 4s cubic-bezier(0.16,1,0.3,1) infinite; }
+  @keyframes cvSettle {
+    0% { transform: rotate(-180deg); opacity: 0.3; }
+    40%,75% { transform: rotate(0deg); opacity: 1; }
+    100% { transform: rotate(-180deg); opacity: 0.3; }
+  }
+
+  /* C14. CENTER BLOOM — center blooms, then pulls lines inward */
+  .c-bloom .cvc { animation: cvBloom 4s ease-in-out infinite; }
+  .c-bloom .cv {
+    stroke-dasharray: 20; stroke-dashoffset: 20;
+    animation: cvBloomLine 4s ease-in-out infinite;
+  }
+  @keyframes cvBloom {
+    0% { transform: scale(0); opacity: 0; }
+    15% { transform: scale(3); opacity: 1; filter: drop-shadow(0 0 12px white); }
+    30%,75% { transform: scale(1); opacity: 1; filter: none; }
+    100% { transform: scale(0); opacity: 0; }
+  }
+  @keyframes cvBloomLine {
+    0%,15% { stroke-dashoffset: 20; }
+    40%,75% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 20; }
+  }
+
+  /* C15. SINGULARITY — scattered lines snap to convergence point */
+  .c-singularity .cv { animation: cvSingLine 4.5s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+  .c-singularity .cvc { animation: cvSingCenter 4.5s ease-in-out infinite; }
+  .c-singularity .cv1 { --sx: -8px; --sy: -8px; --sr: -25deg; }
+  .c-singularity .cv2 { --sx: 3px; --sy: -10px; --sr: 15deg; }
+  .c-singularity .cv3 { --sx: 8px; --sy: -8px; --sr: 30deg; }
+  .c-singularity .cv4 { --sx: -10px; --sy: 3px; --sr: -20deg; }
+  .c-singularity .cv5 { --sx: 10px; --sy: -3px; --sr: 20deg; }
+  .c-singularity .cv6 { --sx: -6px; --sy: 8px; --sr: -35deg; }
+  .c-singularity .cv7 { --sx: 6px; --sy: 8px; --sr: 25deg; }
+  @keyframes cvSingLine {
+    0%,8% { transform: translate(var(--sx), var(--sy)) rotate(var(--sr)); opacity: 0.2; }
+    30%,72% { transform: translate(0,0) rotate(0deg); opacity: 1; }
+    95%,100% { transform: translate(var(--sx), var(--sy)) rotate(var(--sr)); opacity: 0.2; }
+  }
+  @keyframes cvSingCenter {
+    0%,25% { transform: scale(0); opacity: 0; }
+    35%,72% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 6px rgba(255,255,255,0.6)); }
+    95%,100% { transform: scale(0); opacity: 0; }
+  }
+
+  /* ===== TAB 6 — TREE RINGS ===== */
+  .tr-icon { width: 64px; height: 64px; display: block; }
+  .tr-icon path { transform-origin: 16px 16px; }
+
+  /* T1. Grow — rings draw outward from center, one by one */
+  .tr-grow .tr1 { stroke-dasharray: 67; stroke-dashoffset: 67; animation: trDraw67 3.5s ease-out infinite; animation-delay: 1.4s; }
+  .tr-grow .tr2 { stroke-dasharray: 46; stroke-dashoffset: 46; animation: trDraw46 3.5s ease-out infinite; animation-delay: 0.7s; }
+  .tr-grow .tr3 { stroke-dasharray: 25; stroke-dashoffset: 25; animation: trDraw25 3.5s ease-out infinite; animation-delay: 0.2s; }
+  .tr-grow .trc { opacity: 0; animation: trDotIn 3.5s ease-out infinite; }
+  @keyframes trDraw67 {
+    0%,30% { stroke-dashoffset: 67; stroke-opacity: 0; }
+    35% { stroke-opacity: 1; }
+    65%,100% { stroke-dashoffset: 0; stroke-opacity: 1; }
+  }
+  @keyframes trDraw46 {
+    0%,15% { stroke-dashoffset: 46; stroke-opacity: 0; }
+    20% { stroke-opacity: 1; }
+    55%,100% { stroke-dashoffset: 0; stroke-opacity: 1; }
+  }
+  @keyframes trDraw25 {
+    0%,2% { stroke-dashoffset: 25; stroke-opacity: 0; }
+    5% { stroke-opacity: 1; }
+    40%,100% { stroke-dashoffset: 0; stroke-opacity: 1; }
+  }
+  @keyframes trDotIn {
+    0% { opacity: 0; transform: scale(0); }
+    8%,100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* T2. Age — rings fade in sequentially, inner to outer, like counting years */
+  .tr-age .trc { opacity: 0; animation: trAgeFade 4s ease-in-out infinite; animation-delay: 0s; }
+  .tr-age .tr3 { stroke-opacity: 0; animation: trAgeStroke 4s ease-in-out infinite; animation-delay: 0.6s; }
+  .tr-age .tr2 { stroke-opacity: 0; animation: trAgeStroke 4s ease-in-out infinite; animation-delay: 1.2s; }
+  .tr-age .tr1 { stroke-opacity: 0; animation: trAgeStroke 4s ease-in-out infinite; animation-delay: 1.8s; }
+  @keyframes trAgeFade {
+    0%,5% { opacity: 0; }
+    15%,75% { opacity: 1; }
+    90%,100% { opacity: 0; }
+  }
+  @keyframes trAgeStroke {
+    0%,5% { stroke-opacity: 0; }
+    15%,75% { stroke-opacity: 1; }
+    90%,100% { stroke-opacity: 0; }
+  }
+
+  /* T3. Ripple — rings pulse outward in waves from center */
+  .tr-ripple .trc { animation: trRippleDot 2.5s ease-in-out infinite; }
+  .tr-ripple .tr3 { animation: trRippleRing 2.5s ease-in-out infinite; animation-delay: 0.2s; }
+  .tr-ripple .tr2 { animation: trRippleRing 2.5s ease-in-out infinite; animation-delay: 0.5s; }
+  .tr-ripple .tr1 { animation: trRippleRing 2.5s ease-in-out infinite; animation-delay: 0.8s; }
+  @keyframes trRippleDot {
+    0%,100% { opacity: 1; }
+    15% { opacity: 0.3; }
+    40% { opacity: 1; }
+  }
+  @keyframes trRippleRing {
+    0%,100% { stroke-opacity: 0.3; stroke-width: 2; }
+    20% { stroke-opacity: 1; stroke-width: 3; }
+    50% { stroke-opacity: 0.3; stroke-width: 2; }
+  }
+
+  /* T4. Season — stroke dashes rotate around each ring, like seasonal growth */
+  .tr-season .tr1 { stroke-dasharray: 10 8; animation: trSeason67 6s linear infinite; }
+  .tr-season .tr2 { stroke-dasharray: 8 6; animation: trSeason46 4.5s linear infinite reverse; }
+  .tr-season .tr3 { stroke-dasharray: 5 4; animation: trSeason25 3s linear infinite; }
+  .tr-season .trc { animation: trSeasonDot 3s ease-in-out infinite; }
+  @keyframes trSeason67 { to { stroke-dashoffset: -67; } }
+  @keyframes trSeason46 { to { stroke-dashoffset: -46; } }
+  @keyframes trSeason25 { to { stroke-dashoffset: -25; } }
+  @keyframes trSeasonDot {
+    0%,100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* T5. Breathe — rings scale gently in/out from their own centers */
+  .tr-breathe .tr1 { transform-origin: 16px 16px; animation: trBreathe1 3.5s ease-in-out infinite; }
+  .tr-breathe .tr2 { transform-origin: 17.333px 13.333px; animation: trBreathe2 3.5s ease-in-out infinite; animation-delay: 0.3s; }
+  .tr-breathe .tr3 { transform-origin: 18.667px 11.333px; animation: trBreathe3 3.5s ease-in-out infinite; animation-delay: 0.6s; }
+  .tr-breathe .trc { transform-origin: 19.333px 10px; animation: trBreatheDot 3.5s ease-in-out infinite; animation-delay: 0.9s; }
+  @keyframes trBreathe1 {
+    0%,100% { transform: scale(1); stroke-opacity: 0.7; }
+    50% { transform: scale(1.06); stroke-opacity: 1; }
+  }
+  @keyframes trBreathe2 {
+    0%,100% { transform: scale(1); stroke-opacity: 0.7; }
+    50% { transform: scale(1.08); stroke-opacity: 1; }
+  }
+  @keyframes trBreathe3 {
+    0%,100% { transform: scale(1); stroke-opacity: 0.7; }
+    50% { transform: scale(1.12); stroke-opacity: 1; }
+  }
+  @keyframes trBreatheDot {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.5); opacity: 1; }
+  }
+
+  /* T6. Reveal — cross-section rotates into view, like slicing a trunk */
+  .tr-reveal .tr-icon { animation: trReveal 4s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+  @keyframes trReveal {
+    0% { transform: rotateY(90deg) scale(0.8); opacity: 0; }
+    25%,75% { transform: rotateY(0deg) scale(1); opacity: 1; }
+    100% { transform: rotateY(-90deg) scale(0.8); opacity: 0; }
+  }
+
+  /* T7. Echo — opacity pulses travel outward ring by ring */
+  .tr-echo .trc { animation: trEchoPulse 2.8s ease-in-out infinite; animation-delay: 0s; }
+  .tr-echo .tr3 { animation: trEchoRing 2.8s ease-in-out infinite; animation-delay: 0.35s; }
+  .tr-echo .tr2 { animation: trEchoRing 2.8s ease-in-out infinite; animation-delay: 0.7s; }
+  .tr-echo .tr1 { animation: trEchoRing 2.8s ease-in-out infinite; animation-delay: 1.05s; }
+  @keyframes trEchoPulse {
+    0%,20% { opacity: 1; transform: scale(1.3); }
+    40%,100% { opacity: 0.4; transform: scale(1); }
+  }
+  @keyframes trEchoRing {
+    0%,10% { stroke-opacity: 0.15; stroke-width: 1.5; }
+    25%,35% { stroke-opacity: 1; stroke-width: 2.8; }
+    55%,100% { stroke-opacity: 0.15; stroke-width: 1.5; }
+  }
+
+  /* T8. Core — center dot glows bright, energy radiates outward through rings */
+  .tr-core .trc { animation: trCoreDot 3s ease-in-out infinite; }
+  .tr-core .tr3 { animation: trCoreRing 3s ease-in-out infinite; animation-delay: 0.25s; }
+  .tr-core .tr2 { animation: trCoreRing 3s ease-in-out infinite; animation-delay: 0.5s; }
+  .tr-core .tr1 { animation: trCoreRing 3s ease-in-out infinite; animation-delay: 0.75s; }
+  @keyframes trCoreDot {
+    0%,100% { opacity: 1; filter: drop-shadow(0 0 0px white); }
+    30% { opacity: 1; filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
+    60% { opacity: 0.7; filter: drop-shadow(0 0 0px white); }
+  }
+  @keyframes trCoreRing {
+    0%,100% { stroke-opacity: 0.2; stroke-width: 2; }
+    30% { stroke-opacity: 1; stroke-width: 2.6; }
+    60% { stroke-opacity: 0.2; stroke-width: 2; }
+  }
+
+  /* T9. Dendro — rings rotate slightly as if examining the cross-section */
+  .tr-dendro .tr1 { animation: trDendro1 5s ease-in-out infinite; }
+  .tr-dendro .tr2 { animation: trDendro2 5s ease-in-out infinite; }
+  .tr-dendro .tr3 { animation: trDendro3 5s ease-in-out infinite; }
+  .tr-dendro .trc { transform-origin: 19.333px 10px; animation: trDendroDot 5s ease-in-out infinite; }
+  @keyframes trDendro1 {
+    0%,100% { transform: rotate(0deg); }
+    50% { transform: rotate(15deg); }
+  }
+  @keyframes trDendro2 {
+    0%,100% { transform: rotate(0deg); }
+    50% { transform: rotate(-10deg); }
+  }
+  @keyframes trDendro3 {
+    0%,100% { transform: rotate(0deg); }
+    50% { transform: rotate(20deg); }
+  }
+  @keyframes trDendroDot {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+  }
+
+  /* T10. Tide — rings expand and contract in staggered waves */
+  .tr-tide .tr1 { transform-origin: 16px 16px; animation: trTide1 3s ease-in-out infinite; }
+  .tr-tide .tr2 { transform-origin: 17.333px 13.333px; animation: trTide2 3s ease-in-out infinite; animation-delay: 0.4s; }
+  .tr-tide .tr3 { transform-origin: 18.667px 11.333px; animation: trTide3 3s ease-in-out infinite; animation-delay: 0.8s; }
+  .tr-tide .trc { transform-origin: 19.333px 10px; animation: trTideDot 3s ease-in-out infinite; animation-delay: 1.2s; }
+  @keyframes trTide1 {
+    0%,100% { transform: scale(1); stroke-opacity: 1; }
+    50% { transform: scale(1.1); stroke-opacity: 0.4; }
+  }
+  @keyframes trTide2 {
+    0%,100% { transform: scale(1); stroke-opacity: 1; }
+    50% { transform: scale(0.9); stroke-opacity: 0.4; }
+  }
+  @keyframes trTide3 {
+    0%,100% { transform: scale(1); stroke-opacity: 1; }
+    50% { transform: scale(1.15); stroke-opacity: 0.4; }
+  }
+  @keyframes trTideDot {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.5); opacity: 0.3; }
+  }
+
+  /* ===== TAB 7 — J DOCTOR ===== */
+  .jd-icon { width: 64px; height: 64px; display: block; }
+  .jd-icon path { transform-origin: 262.75px 262.5px; }
+
+  /* D1. Diagnose — two halves separate along the J-curve, examine, rejoin */
+  .jd-diagnose .jd1 { animation: jdDiagL 3.5s ease-in-out infinite; }
+  .jd-diagnose .jd2 { animation: jdDiagR 3.5s ease-in-out infinite; }
+  @keyframes jdDiagL {
+    0%,15% { transform: translateX(0); opacity: 1; }
+    30%,55% { transform: translateX(-40px); opacity: 0.7; }
+    75%,100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes jdDiagR {
+    0%,15% { transform: translateX(0); opacity: 1; }
+    30%,55% { transform: translateX(40px); opacity: 0.7; }
+    75%,100% { transform: translateX(0); opacity: 1; }
+  }
+
+  /* D2. Pulse — medical heartbeat throb: double-beat then rest */
+  .jd-pulse .jd-icon { animation: jdPulse 2.2s ease-in-out infinite; }
+  @keyframes jdPulse {
+    0%,8% { transform: scale(1); }
+    13% { transform: scale(1.12); }
+    22% { transform: scale(0.97); }
+    27% { transform: scale(1.07); }
+    36%,100% { transform: scale(1); }
+  }
+
+  /* D3. Stitch — halves slide in from opposite sides, suturing together */
+  .jd-stitch .jd1 { animation: jdStitchL 3.5s ease-out infinite; }
+  .jd-stitch .jd2 { animation: jdStitchR 3.5s ease-out infinite; }
+  @keyframes jdStitchL {
+    0%,5% { transform: translateX(-120px); opacity: 0; }
+    35%,70% { transform: translateX(0); opacity: 1; }
+    92%,100% { transform: translateX(-120px); opacity: 0; }
+  }
+  @keyframes jdStitchR {
+    0%,10% { transform: translateX(120px); opacity: 0; }
+    40%,70% { transform: translateX(0); opacity: 1; }
+    92%,100% { transform: translateX(120px); opacity: 0; }
+  }
+
+  /* D4. Vitals — opacity double-beep like a heart monitor */
+  .jd-vitals .jd-icon { animation: jdVitals 2.5s ease-in-out infinite; }
+  @keyframes jdVitals {
+    0%,5% { opacity: 0.12; }
+    10%,14% { opacity: 1; }
+    20%,24% { opacity: 0.12; }
+    28%,32% { opacity: 1; }
+    40%,100% { opacity: 0.12; }
+  }
+
+  /* D5. Glow — healing aura pulses outward from the star */
+  .jd-glow .jd-icon { animation: jdGlow 3s ease-in-out infinite; }
+  @keyframes jdGlow {
+    0%,100% { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+    50% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.85)) drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
+  }
+
+  /* D6. Triage — left half assessed first, right follows */
+  .jd-triage .jd1 { opacity: 0; animation: jdTriageA 4s ease-out infinite; }
+  .jd-triage .jd2 { opacity: 0; animation: jdTriageB 4s ease-out infinite; animation-delay: 0.6s; }
+  @keyframes jdTriageA {
+    0% { opacity: 0; transform: scale(0.7); }
+    18%,70% { opacity: 1; transform: scale(1); }
+    90%,100% { opacity: 0; transform: scale(0.7); }
+  }
+  @keyframes jdTriageB {
+    0% { opacity: 0; transform: scale(0.7); }
+    18%,65% { opacity: 1; transform: scale(1); }
+    85%,100% { opacity: 0; transform: scale(0.7); }
+  }
+
+  /* D7. Incise — halves rotate apart like scissors, then close */
+  .jd-incise .jd1 { animation: jdInciseL 3s ease-in-out infinite; }
+  .jd-incise .jd2 { animation: jdInciseR 3s ease-in-out infinite; }
+  @keyframes jdInciseL {
+    0%,18% { transform: rotate(0deg); }
+    35%,55% { transform: rotate(-10deg); }
+    75%,100% { transform: rotate(0deg); }
+  }
+  @keyframes jdInciseR {
+    0%,18% { transform: rotate(0deg); }
+    35%,55% { transform: rotate(10deg); }
+    75%,100% { transform: rotate(0deg); }
+  }
+
+  /* D8. Resuscitate — icon springs to life from nothing */
+  .jd-resus .jd-icon { animation: jdResus 3.5s cubic-bezier(0.34,1.56,0.64,1) infinite; }
+  @keyframes jdResus {
+    0%,5% { transform: scale(0); opacity: 0; }
+    30% { transform: scale(1.15); opacity: 1; }
+    42% { transform: scale(0.93); }
+    52%,72% { transform: scale(1); opacity: 1; }
+    90%,100% { transform: scale(0); opacity: 0; }
+  }
+
+  /* D9. Radiate — brightness pulses outward from center through each half */
+  .jd-radiate .jd1 { animation: jdRadA 2.8s ease-in-out infinite; }
+  .jd-radiate .jd2 { animation: jdRadB 2.8s ease-in-out infinite; }
+  @keyframes jdRadA {
+    0%,100% { opacity: 0.1; }
+    20%,55% { opacity: 1; }
+  }
+  @keyframes jdRadB {
+    0%,100% { opacity: 0.1; }
+    30%,65% { opacity: 1; }
+  }
+
+  /* D10. Remedy — halves drift in from opposite directions, assembling the cure */
+  .jd-remedy .jd1 { animation: jdRemedyL 3.5s ease-out infinite; }
+  .jd-remedy .jd2 { animation: jdRemedyR 3.5s ease-out infinite; }
+  @keyframes jdRemedyL {
+    0%,5% { opacity: 0; transform: translateY(-40px) rotate(-6deg); }
+    30%,70% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    92%,100% { opacity: 0; transform: translateY(-40px) rotate(-6deg); }
+  }
+  @keyframes jdRemedyR {
+    0%,10% { opacity: 0; transform: translateY(40px) rotate(6deg); }
+    35%,70% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    92%,100% { opacity: 0; transform: translateY(40px) rotate(6deg); }
+  }
+
+  .try-btn {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 200;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #2dd4bf, #14b8a6);
+    color: #000;
+    border: none;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .try-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(45,212,191,0.3); }
+
+  /* ===== TAB 8 — CLIPART ===== */
+  .ca-icon { width: 64px; height: 72px; display: block; }
+  .ca-leye { transform-origin: 45.1px 31.4px; }
+  .ca-reye { transform-origin: 95.1px 31.4px; }
+
+  /* CA1. Look Around — eyes glance left then right */
+  .ca-look .ca-leye, .ca-look .ca-reye { animation: caLook 3s ease-in-out infinite; }
+  @keyframes caLook {
+    0%,18%,100% { transform: translateX(0); }
+    28%,42% { transform: translateX(-8px); }
+    58%,72% { transform: translateX(8px); }
+  }
+
+  /* CA2. Blink — quick double blink */
+  .ca-blink .ca-leye { animation: caBlink 3.5s ease-in-out infinite; }
+  .ca-blink .ca-reye { animation: caBlink 3.5s ease-in-out infinite; }
+  @keyframes caBlink {
+    0%,36%,40%,76%,80%,100% { transform: scaleY(1); }
+    38% { transform: scaleY(0.05); }
+    78% { transform: scaleY(0.05); }
+  }
+
+  /* CA3. Wink — right eye winks, left stays open */
+  .ca-wink .ca-reye { animation: caWink 3s ease-in-out infinite; }
+  @keyframes caWink {
+    0%,28%,36%,100% { transform: scaleY(1); }
+    32% { transform: scaleY(0.05); }
+  }
+
+  /* CA4. Cross-eyed — eyes drift toward center then back */
+  .ca-cross .ca-leye { animation: caCrossL 3.5s ease-in-out infinite; }
+  .ca-cross .ca-reye { animation: caCrossR 3.5s ease-in-out infinite; }
+  @keyframes caCrossL {
+    0%,20%,70%,100% { transform: translateX(0); }
+    35%,55% { transform: translateX(12px); }
+  }
+  @keyframes caCrossR {
+    0%,20%,70%,100% { transform: translateX(0); }
+    35%,55% { transform: translateX(-12px); }
+  }
+
+  /* CA5. Surprise — eyes widen in shock */
+  .ca-surprise .ca-leye { animation: caSurprise 3s ease-out infinite; }
+  .ca-surprise .ca-reye { animation: caSurprise 3s ease-out infinite; }
+  .ca-surprise .ca-smile { animation: caSurpriseSmile 3s ease-out infinite; }
+  @keyframes caSurprise {
+    0%,18%,60%,100% { transform: scale(1); }
+    28%,45% { transform: scale(1.35); }
+  }
+  @keyframes caSurpriseSmile {
+    0%,18%,60%,100% { stroke-width: 20.2; }
+    28%,45% { stroke-width: 16; }
+  }
+
+  /* CA6. Smile Draw — the smile/J draws itself, then eyes pop in */
+  .ca-draw .ca-smile { stroke-dasharray: 300; stroke-dashoffset: 300; animation: caDrawSmile 3.5s ease-in-out infinite; }
+  .ca-draw .ca-leye { stroke-opacity: 0; animation: caDrawEye 3.5s ease-out infinite; animation-delay: 1s; }
+  .ca-draw .ca-reye { stroke-opacity: 0; animation: caDrawEye 3.5s ease-out infinite; animation-delay: 1.3s; }
+  @keyframes caDrawSmile {
+    0%,8% { stroke-dashoffset: 300; }
+    50%,75% { stroke-dashoffset: 0; }
+    95%,100% { stroke-dashoffset: 300; }
+  }
+  @keyframes caDrawEye {
+    0%,3% { stroke-opacity: 0; transform: scale(0); }
+    15%,65% { stroke-opacity: 1; transform: scale(1); }
+    85%,100% { stroke-opacity: 0; transform: scale(0); }
+  }
+
+  /* CA7. Dash Loader — dashes stream around the smile path continuously */
+  .ca-loader .ca-smile { stroke-dasharray: 30 20; animation: caLoader 2s linear infinite; }
+  .ca-loader .ca-leye { animation: caLoaderEye 2s ease-in-out infinite; }
+  .ca-loader .ca-reye { animation: caLoaderEye 2s ease-in-out infinite; animation-delay: 0.3s; }
+  @keyframes caLoader { to { stroke-dashoffset: -300; } }
+  @keyframes caLoaderEye {
+    0%,100% { stroke-opacity: 0.4; }
+    50% { stroke-opacity: 1; }
+  }
+
+  /* CA8. Trace — paths draw sequentially: left eye, right eye, then smile */
+  .ca-trace .ca-leye { stroke-dasharray: 30; stroke-dashoffset: 30; animation: caTraceEye 4.5s ease-out infinite; }
+  .ca-trace .ca-reye { stroke-dasharray: 30; stroke-dashoffset: 30; animation: caTraceEye 4.5s ease-out infinite; animation-delay: 0.6s; }
+  .ca-trace .ca-smile { stroke-dasharray: 300; stroke-dashoffset: 300; animation: caTraceSmile 4.5s ease-out infinite; animation-delay: 1.2s; }
+  @keyframes caTraceEye {
+    0%,3% { stroke-dashoffset: 30; stroke-opacity: 0; }
+    6% { stroke-opacity: 1; }
+    20%,62% { stroke-dashoffset: 0; stroke-opacity: 1; }
+    80%,100% { stroke-dashoffset: 30; stroke-opacity: 0; }
+  }
+  @keyframes caTraceSmile {
+    0%,2% { stroke-dashoffset: 300; stroke-opacity: 0; }
+    5% { stroke-opacity: 1; }
+    45%,55% { stroke-dashoffset: 0; stroke-opacity: 1; }
+    78%,100% { stroke-dashoffset: 300; stroke-opacity: 0; }
+  }
+
+  /* CA9. Orbit — a single dash orbits the smile, eyes pulse alternately */
+  .ca-orbit .ca-smile { stroke-dasharray: 18 282; animation: caOrbit 1.8s linear infinite; }
+  .ca-orbit .ca-leye { stroke-dasharray: 10 20; animation: caOrbitEyeL 1.2s linear infinite; }
+  .ca-orbit .ca-reye { stroke-dasharray: 10 20; animation: caOrbitEyeR 1.2s linear infinite; }
+  @keyframes caOrbit { to { stroke-dashoffset: -300; } }
+  @keyframes caOrbitEyeL { to { stroke-dashoffset: -30; } }
+  @keyframes caOrbitEyeR { to { stroke-dashoffset: 30; } }
+
+  /* CA10. Pulse Loader — smile throbs in stroke-width like a heartbeat */
+  .ca-pulse .ca-smile { animation: caPulseSmile 2.2s ease-in-out infinite; }
+  .ca-pulse .ca-leye, .ca-pulse .ca-reye { animation: caPulseEye 2.2s ease-in-out infinite; }
+  @keyframes caPulseSmile {
+    0%,100% { stroke-width: 18; stroke-opacity: 0.5; }
+    40%,55% { stroke-width: 26; stroke-opacity: 1; }
+  }
+  @keyframes caPulseEye {
+    0%,100% { stroke-width: 26; stroke-opacity: 0.5; }
+    40%,55% { stroke-width: 34; stroke-opacity: 1; }
+  }
+
+  /* CA11. Happy — eyes squint joyfully, icon bounces */
+  .ca-happy .ca-leye { animation: caHappyEye 2.5s ease-in-out infinite; }
+  .ca-happy .ca-reye { animation: caHappyEye 2.5s ease-in-out infinite; }
+  .ca-happy .ca-icon { animation: caHappyBounce 2.5s ease-in-out infinite; }
+  @keyframes caHappyEye {
+    0%,100% { transform: scaleY(1); }
+    35%,65% { transform: scaleY(0.5); }
+  }
+  @keyframes caHappyBounce {
+    0%,100% { transform: translateY(0); }
+    20% { transform: translateY(-4px); }
+    40% { transform: translateY(0); }
+    55% { transform: translateY(-2px); }
+    70% { transform: translateY(0); }
+  }
+
+  /* CA12. Sleepy — eyes droop shut, smile fades */
+  .ca-sleepy .ca-leye { animation: caSleepy 4.5s ease-in-out infinite; }
+  .ca-sleepy .ca-reye { animation: caSleepy 4.5s ease-in-out infinite; animation-delay: 0.3s; }
+  .ca-sleepy .ca-smile { animation: caSleepySmile 4.5s ease-in-out infinite; }
+  @keyframes caSleepy {
+    0%,12% { transform: scaleY(1) translateY(0); }
+    35%,65% { transform: scaleY(0.15) translateY(4px); }
+    88%,100% { transform: scaleY(1) translateY(0); }
+  }
+  @keyframes caSleepySmile {
+    0%,12% { stroke-opacity: 1; }
+    35%,65% { stroke-opacity: 0.25; }
+    88%,100% { stroke-opacity: 1; }
+  }
+
+  /* CA13. Excited — bouncy + wide eyes */
+  .ca-excited .ca-icon { animation: caExBounce 1.5s ease-in-out infinite; }
+  .ca-excited .ca-leye { animation: caExEye 1.5s ease-in-out infinite; }
+  .ca-excited .ca-reye { animation: caExEye 1.5s ease-in-out infinite; }
+  @keyframes caExBounce {
+    0%,100% { transform: translateY(0); }
+    25% { transform: translateY(-6px); }
+    50% { transform: translateY(0); }
+    75% { transform: translateY(-3px); }
+  }
+  @keyframes caExEye {
+    0%,100% { transform: scaleY(1) scaleX(1); }
+    25% { transform: scaleY(1.35) scaleX(1.1); }
+    50% { transform: scaleY(1) scaleX(1); }
+    75% { transform: scaleY(1.2) scaleX(1.05); }
+  }
+
+  /* CA14. Dizzy — eyes spin, icon sways */
+  .ca-dizzy .ca-leye { animation: caDizzyEye 1.8s linear infinite; }
+  .ca-dizzy .ca-reye { animation: caDizzyEye 1.8s linear infinite reverse; }
+  .ca-dizzy .ca-icon { animation: caDizzySway 3s ease-in-out infinite; }
+  @keyframes caDizzyEye { to { transform: rotate(360deg); } }
+  @keyframes caDizzySway {
+    0%,100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+  }
+
+  /* CA15. Assemble — elements appear one by one with motion */
+  .ca-assemble .ca-leye { stroke-opacity: 0; animation: caAsmEyeL 4s ease-out infinite; }
+  .ca-assemble .ca-reye { stroke-opacity: 0; animation: caAsmEyeR 4s ease-out infinite; }
+  .ca-assemble .ca-smile { stroke-dasharray: 300; stroke-dashoffset: 300; stroke-opacity: 0; animation: caAsmSmile 4s ease-out infinite; }
+  @keyframes caAsmEyeL {
+    0%,5% { stroke-opacity: 0; transform: translateY(-10px); }
+    15%,68% { stroke-opacity: 1; transform: translateY(0); }
+    85%,100% { stroke-opacity: 0; transform: translateY(-10px); }
+  }
+  @keyframes caAsmEyeR {
+    0%,10% { stroke-opacity: 0; transform: translateY(-10px); }
+    22%,68% { stroke-opacity: 1; transform: translateY(0); }
+    85%,100% { stroke-opacity: 0; transform: translateY(-10px); }
+  }
+  @keyframes caAsmSmile {
+    0%,15% { stroke-dashoffset: 300; stroke-opacity: 0; }
+    20% { stroke-opacity: 1; }
+    55%,65% { stroke-dashoffset: 0; stroke-opacity: 1; }
+    82%,100% { stroke-dashoffset: 300; stroke-opacity: 0; }
+  }

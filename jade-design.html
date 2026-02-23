@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jade AI — Design Preview</title>
+<link rel="stylesheet" href="jade-animations.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .phone {
+    width: 393px;
+    min-height: 100vh;
+    background: #0f0f0f;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== STATUS BAR ===== */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 8px;
+    height: 54px;
+  }
+  .status-time {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.2px;
+  }
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-icons svg { display: block; }
+
+  /* ===== NAV BAR ===== */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 20px 12px;
+    border-bottom: 1px solid #1a1a1a;
+    position: relative;
+  }
+  .nav-back {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 50%;
+    transition: background 0.15s;
+  }
+  .nav-back:hover { background: rgba(255,255,255,0.06); }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .nav-center:hover { background: rgba(255,255,255,0.06); }
+  .nav-center.open { background: rgba(255,255,255,0.08); }
+
+  .jade-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+  }
+  .chevron {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s;
+  }
+  .nav-center.open .chevron { transform: rotate(180deg); }
+
+  .nav-chat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .nav-chat:hover { background: rgba(255,255,255,0.06); }
+
+  /* ===== DROPDOWN ===== */
+  .dropdown-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+  }
+  .dropdown-overlay.open { display: block; }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    z-index: 100;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    padding: 8px 0;
+  }
+  .dropdown.open { display: block; }
+
+  .dropdown-group {
+    padding: 10px 16px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #2dd4bf;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .dropdown-item {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #ccc;
+    cursor: pointer;
+    transition: background 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dropdown-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .dropdown-item.active { color: #2dd4bf; background: rgba(45,212,191,0.08); }
+  .dropdown-item .item-num {
+    font-size: 10px;
+    color: #555;
+    width: 20px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .dropdown::-webkit-scrollbar { width: 4px; }
+  .dropdown::-webkit-scrollbar-track { background: transparent; }
+  .dropdown::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+  /* ===== MAIN CONTENT ===== */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    gap: 16px;
+  }
+
+  .loader-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .loader-slot {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Override icon sizes for 48px loader slot */
+  .loader-slot .icon-wrap,
+  .loader-slot .icon-container {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .loader-slot .cv-icon,
+  .loader-slot .tr-icon,
+  .loader-slot .jd-icon,
+  .loader-slot .l-icon {
+    width: 48px;
+    height: 48px;
+  }
+  .loader-slot .ca-icon {
+    width: 42px;
+    height: 48px;
+  }
+  .loader-slot .eye-icon {
+    width: 48px;
+    height: auto;
+  }
+  .loader-slot .halftone {
+    transform: scale(0.82);
+  }
+
+  /* Default spinner */
+  .default-loader {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: #2dd4bf;
+    border-radius: 50%;
+    animation: defaultSpin 1s linear infinite;
+  }
+  @keyframes defaultSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  .generating-text {
+    font-size: 16px;
+    font-weight: 500;
+    font-style: italic;
+    color: #fff;
+    text-align: center;
+  }
+  .subtitle-text {
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ===== CHAT INPUT ===== */
+  .chat-area {
+    padding: 12px 16px 8px;
+  }
+  .input-bar {
+    display: flex;
+    align-items: center;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 28px;
+    padding: 10px 8px 10px 20px;
+    gap: 8px;
+  }
+  .input-placeholder {
+    flex: 1;
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .send-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #14b8a6;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .send-btn:hover { background: #2dd4bf; }
+
+  /* ===== HOME INDICATOR ===== */
+  .home-area {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 12px;
+  }
+  .home-indicator {
+    width: 134px;
+    height: 5px;
+    background: #fff;
+    border-radius: 3px;
+    opacity: 0.2;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+        <rect x="0" y="3" width="3" height="9" rx="1" fill="white" opacity="0.3"/>
+        <rect x="4" y="2" width="3" height="10" rx="1" fill="white" opacity="0.5"/>
+        <rect x="8" y="1" width="3" height="11" rx="1" fill="white" opacity="0.7"/>
+        <rect x="12" y="0" width="3" height="12" rx="1" fill="white"/>
+      </svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+        <path d="M8 3.6C9.8 3.6 11.4 4.3 12.5 5.5L14 4C12.4 2.4 10.3 1.5 8 1.5C5.7 1.5 3.6 2.4 2 4L3.5 5.5C4.6 4.3 6.2 3.6 8 3.6Z" fill="white" opacity="0.5"/>
+        <path d="M8 6.5C9.2 6.5 10.2 7 11 7.7L12.5 6.2C11.3 5.1 9.7 4.5 8 4.5C6.3 4.5 4.7 5.1 3.5 6.2L5 7.7C5.8 7 6.8 6.5 8 6.5Z" fill="white" opacity="0.7"/>
+        <circle cx="8" cy="10" r="1.5" fill="white"/>
+      </svg>
+      <svg width="26" height="12" viewBox="0 0 26 12" fill="none">
+        <rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/>
+        <rect x="2" y="2" width="18" height="8" rx="1" fill="white"/>
+        <rect x="23.5" y="3.5" width="2" height="5" rx="1" fill="white" opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Nav Bar -->
+  <div class="nav-bar">
+    <a href="icon-animations.html" class="nav-back">
+      <svg width="10" height="18" viewBox="0 0 10 18" fill="none">
+        <path d="M9 1L1 9L9 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <div class="nav-center" id="navCenter" onclick="toggleDropdown()">
+      <span class="jade-title">JADE</span>
+      <svg class="chevron" viewBox="0 0 12 12" fill="none">
+        <path d="M2 4L6 8L10 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="nav-chat">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M21 11.5C21 16.75 16.75 21 11.5 21C10 21 8.6 20.7 7.3 20.1L3 21L3.9 16.7C3.3 15.4 3 14 3 12.5C3 7.25 7.25 3 12.5 3C17.75 3 21 6.25 21 11.5Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Dropdown -->
+    <div class="dropdown" id="dropdown"></div>
+  </div>
+  <div class="dropdown-overlay" id="dropdownOverlay" onclick="toggleDropdown()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="loader-area">
+      <div class="loader-slot" id="loaderSlot">
+        <div class="default-loader"></div>
+      </div>
+      <p class="generating-text">Generating Sleep Score</p>
+    </div>
+    <p class="subtitle-text">This will take few seconds</p>
+  </div>
+
+  <!-- Chat Input -->
+  <div class="chat-area">
+    <div class="input-bar">
+      <span class="input-placeholder">Feeling off? Share with Jade</span>
+      <button class="send-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Home Indicator -->
+  <div class="home-area">
+    <div class="home-indicator"></div>
+  </div>
+
+</div>
+
+<script>
+// ===== ANIMATION TEMPLATES =====
+// Each icon type defines its base SVG and list of animations
+
+const ICONS = {
+  clipart: {
+    label: 'Clipart',
+    svg: `<svg class="ca-icon" viewBox="0 0 150.153 170.752" fill="none">
+      <path class="ca-smile" d="M10.1061 95.6782C10.1061 131.559 39.1932 160.646 75.0739 160.646C110.955 160.646 140.042 131.559 140.042 95.6782L140.047 10.1061" stroke="white" stroke-width="20.2122" stroke-linecap="round"/>
+      <path class="ca-reye" d="M95.1061 46.4003L95.1061 16.4003" stroke="white" stroke-width="30" stroke-linecap="round"/>
+      <path class="ca-leye" d="M45.1061 46.4003L45.1061 16.4003" stroke="white" stroke-width="30" stroke-linecap="round"/>
+    </svg>`,
+    anims: [
+      { name: 'Look Around', cls: 'ca-look' },
+      { name: 'Blink', cls: 'ca-blink' },
+      { name: 'Wink', cls: 'ca-wink' },
+      { name: 'Cross-eyed', cls: 'ca-cross' },
+      { name: 'Surprise', cls: 'ca-surprise' },
+      { name: 'Smile Draw', cls: 'ca-draw' },
+      { name: 'Dash Loader', cls: 'ca-loader' },
+      { name: 'Trace', cls: 'ca-trace' },
+      { name: 'Orbit', cls: 'ca-orbit' },
+      { name: 'Pulse Loader', cls: 'ca-pulse' },
+      { name: 'Happy', cls: 'ca-happy' },
+      { name: 'Sleepy', cls: 'ca-sleepy' },
+      { name: 'Excited', cls: 'ca-excited' },
+      { name: 'Dizzy', cls: 'ca-dizzy' },
+      { name: 'Assemble', cls: 'ca-assemble' }
+    ]
+  },
+
+  convergence: {
+    label: 'Convergence',
+    svg: `<svg class="cv-icon" viewBox="0 0 32 32" fill="none">
+      <path class="cv cv1" d="M2.66667 2.66667L16 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="cv cv2" d="M16 2.66667V16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="cv cv3" d="M29.3333 2.66667L16 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="cv cv4" d="M2.66667 16H16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="cv cv5" d="M29.3333 16H16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="cv cv6" d="M5.33333 29.3333L16 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="cv cv7" d="M26.6667 29.3333L16 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="cvc" d="M16 18.6667C17.4728 18.6667 18.6667 17.4728 18.6667 16C18.6667 14.5272 17.4728 13.3333 16 13.3333C14.5272 13.3333 13.3333 14.5272 13.3333 16C13.3333 17.4728 14.5272 18.6667 16 18.6667Z" fill="white"/>
+    </svg>`,
+    anims: [
+      { name: 'Converge', cls: 'c-converge' },
+      { name: 'Gather', cls: 'c-gather' },
+      { name: 'Gravity', cls: 'c-gravity' },
+      { name: 'Pulse Inward', cls: 'c-pulse-in' },
+      { name: 'Flow', cls: 'c-flow' },
+      { name: 'Breathe', cls: 'c-breathe' },
+      { name: 'Collapse', cls: 'c-collapse' },
+      { name: 'Focus', cls: 'c-focus' },
+      { name: 'Radar', cls: 'c-radar' },
+      { name: 'Pinch', cls: 'c-pinch' },
+      { name: 'Assembly', cls: 'c-assembly' },
+      { name: 'Tremor', cls: 'c-tremor' },
+      { name: 'Settle', cls: 'c-settle' },
+      { name: 'Center Bloom', cls: 'c-bloom' },
+      { name: 'Singularity', cls: 'c-singularity' }
+    ]
+  },
+
+  treeRings: {
+    label: 'Tree Rings',
+    svg: `<svg class="tr-icon" viewBox="0 0 32 32" fill="none">
+      <path class="tr tr1" d="M16 26.6667C21.891 26.6667 26.6667 21.891 26.6667 16C26.6667 10.109 21.891 5.33333 16 5.33333C10.109 5.33333 5.33333 10.109 5.33333 16C5.33333 21.891 10.109 26.6667 16 26.6667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="tr tr2" d="M17.3337 20.6667C21.3837 20.6667 24.667 17.3834 24.667 13.3334C24.667 9.28327 21.3837 6.00002 17.3337 6.00002C13.2836 6.00002 10.0003 9.28327 10.0003 13.3334C10.0003 17.3834 13.2836 20.6667 17.3337 20.6667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="tr tr3" d="M18.6668 15.3333C20.876 15.3333 22.6668 13.5425 22.6668 11.3333C22.6668 9.12419 20.876 7.33333 18.6668 7.33333C16.4577 7.33333 14.6668 9.12419 14.6668 11.3333C14.6668 13.5425 16.4577 15.3333 18.6668 15.3333Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="trc" d="M19.3337 11.3333C20.07 11.3333 20.667 10.7364 20.667 9.99998C20.667 9.2636 20.07 8.66665 19.3337 8.66665C18.5973 8.66665 18.0003 9.2636 18.0003 9.99998C18.0003 10.7364 18.5973 11.3333 19.3337 11.3333Z" fill="white"/>
+    </svg>`,
+    anims: [
+      { name: 'Grow', cls: 'tr-grow' },
+      { name: 'Age', cls: 'tr-age' },
+      { name: 'Ripple', cls: 'tr-ripple' },
+      { name: 'Season', cls: 'tr-season' },
+      { name: 'Breathe', cls: 'tr-breathe' },
+      { name: 'Reveal', cls: 'tr-reveal' },
+      { name: 'Echo', cls: 'tr-echo' },
+      { name: 'Core', cls: 'tr-core' },
+      { name: 'Dendro', cls: 'tr-dendro' },
+      { name: 'Tide', cls: 'tr-tide' }
+    ]
+  },
+
+  jDoctor: {
+    label: 'J Doctor',
+    svg: `<svg class="jd-icon" viewBox="-60 -60 645.495 645" fill="none">
+      <path class="jd1" d="M313 175.289L313.143 175.206V227.002C313.143 266.919 291.898 303.819 257.377 323.861L205.829 353.789L50.5 443.469L0 356L161.791 262.59L0.5 169.469L51 82L212 174.953V0H313V175.289Z" fill="white"/>
+      <path class="jd2" d="M524.995 169.519L363.792 262.589L525.495 355.949L474.995 443.418L313 349.891V525H212V396.459L277.461 358.454C324.31 331.254 353.143 281.175 353.143 227.002V152.112L474.495 82.0498L524.995 169.519Z" fill="white"/>
+    </svg>`,
+    anims: [
+      { name: 'Diagnose', cls: 'jd-diagnose' },
+      { name: 'Pulse', cls: 'jd-pulse' },
+      { name: 'Stitch', cls: 'jd-stitch' },
+      { name: 'Vitals', cls: 'jd-vitals' },
+      { name: 'Glow', cls: 'jd-glow' },
+      { name: 'Triage', cls: 'jd-triage' },
+      { name: 'Incise', cls: 'jd-incise' },
+      { name: 'Resuscitate', cls: 'jd-resus' },
+      { name: 'Radiate', cls: 'jd-radiate' },
+      { name: 'Remedy', cls: 'jd-remedy' }
+    ]
+  },
+
+  lattice: {
+    label: 'Lattice',
+    svg: `<svg class="l-icon" viewBox="0 0 32 32" fill="none">
+      <path class="lp1" d="M16 2.66667L29.3333 13.3333L22.6667 29.3333H9.33333L2.66667 13.3333L16 2.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="lp2" d="M16 2.66667V29.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="lp3" d="M2.66667 13.3333H29.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="lp4" d="M9.33333 29.3333L29.3333 13.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="lp5" d="M22.6667 29.3333L2.66667 13.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+    anims: [
+      { name: 'Pulse', cls: 'l-pulse' },
+      { name: 'Spin', cls: 'l-spin' },
+      { name: 'Bounce', cls: 'l-bounce' },
+      { name: 'Fade Pulse', cls: 'l-fade' },
+      { name: '3D Flip X', cls: 'l-flipx' },
+      { name: '3D Flip Y', cls: 'l-flipy' },
+      { name: 'Draw-on', cls: 'l-draw' },
+      { name: 'Edge Cascade', cls: 'l-cascade' },
+      { name: 'Glow Pulse', cls: 'l-glow' },
+      { name: 'Orbit', cls: 'l-orbit' },
+      { name: 'Shake', cls: 'l-shake' },
+      { name: 'Morph Scale', cls: 'l-morph' },
+      { name: 'Pendulum', cls: 'l-pendulum' },
+      { name: 'Ripple', cls: 'l-ripple', extra: '<span class="ripple-ring"></span><span class="ripple-ring"></span><span class="ripple-ring"></span>' },
+      { name: 'Heartbeat', cls: 'l-heartbeat' },
+      { name: 'Stagger Reveal', cls: 'l-stagger-reveal' },
+      { name: 'Line Pulse', cls: 'l-line-pulse' },
+      { name: 'Stroke Chase', cls: 'l-stroke-chase' },
+      { name: 'Skeleton Build', cls: 'l-skeleton' },
+      { name: 'Breathing Weights', cls: 'l-breathe-weight' },
+      { name: 'Inner/Outer', cls: 'l-inner-outer' },
+      { name: 'Cross Sweep', cls: 'l-cross-sweep' },
+      { name: 'Cascade Glow', cls: 'l-cascade-glow' },
+      { name: 'Counter Flow', cls: 'l-counter-flow' },
+      { name: 'Deconstruct', cls: 'l-deconstruct' }
+    ]
+  },
+
+  eye: {
+    label: 'The Eye',
+    svg: `<svg class="eye-icon" viewBox="0 0 44 19" fill="none">
+      <path class="ep1" d="M30.6445 1.94336C38.4972 3.28283 43.9997 6.39128 44 10.0127C44 14.8581 34.1503 18.7861 22 18.7861C9.84973 18.7861 0 14.858 0 10.0127C0.000268628 6.39129 5.50288 3.28284 13.3555 1.94336C13.0958 2.5012 12.8878 3.08809 12.7393 3.69824C8.07352 5.04027 4.98849 7.36716 4.98828 10.0127C4.98828 14.1694 12.6045 17.5391 22 17.5391C31.3956 17.5391 39.0127 14.1694 39.0127 10.0127C39.0125 7.36714 35.9265 5.04027 31.2607 3.69824C31.1122 3.08809 30.9042 2.5012 30.6445 1.94336Z" fill="white"/>
+      <path class="ep2" fill-rule="evenodd" clip-rule="evenodd" d="M22 0C26.3288 0 29.8378 3.50908 29.8379 7.83789C29.8379 12.1667 26.3288 15.6758 22 15.6758C17.6712 15.6757 14.1621 12.1667 14.1621 7.83789C14.1622 3.50915 17.6713 9.91522e-05 22 0ZM25.6963 2.93945C24.8356 2.93959 24.1377 3.63728 24.1377 4.49805C24.1378 5.35874 24.8356 6.0565 25.6963 6.05664C26.5571 6.05664 27.2548 5.35883 27.2549 4.49805C27.2549 3.6372 26.5571 2.93945 25.6963 2.93945Z" fill="white"/>
+    </svg>`,
+    anims: [
+      { name: 'Pulse', cls: 'e-pulse' },
+      { name: 'Spin', cls: 'e-spin' },
+      { name: 'Bounce', cls: 'e-bounce' },
+      { name: 'Fade Pulse', cls: 'e-fade' },
+      { name: '3D Flip X', cls: 'e-flipx' },
+      { name: '3D Flip Y', cls: 'e-flipy' },
+      { name: 'Draw-on', cls: 'e-draw' },
+      { name: 'Edge Cascade', cls: 'e-cascade' },
+      { name: 'Glow Pulse', cls: 'e-glow' },
+      { name: 'Orbit', cls: 'e-orbit' },
+      { name: 'Shake', cls: 'e-shake' },
+      { name: 'Morph Scale', cls: 'e-morph' },
+      { name: 'Pendulum', cls: 'e-pendulum' },
+      { name: 'Ripple', cls: 'e-ripple', extra: '<span class="eye-ring"></span><span class="eye-ring"></span><span class="eye-ring"></span>' },
+      { name: 'Color Shift', cls: 'e-color' }
+    ]
+  },
+
+  halftone: {
+    label: 'Halftone',
+    svg: null,
+    divTemplate: `<div class="halftone"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`,
+    anims: [
+      { name: 'Pulse', cls: 'anim-pulse', wrapEl: 'icon-container' },
+      { name: 'Wave', cls: 'anim-wave', wrapEl: 'icon-container' },
+      { name: 'Spin', cls: 'anim-spin', wrapEl: 'icon-container' },
+      { name: 'Stagger Fade', cls: 'anim-stagger', wrapEl: 'icon-container' },
+      { name: 'Bounce', cls: 'anim-bounce', wrapEl: 'icon-container' },
+      { name: 'Ripple', cls: 'anim-ripple', wrapEl: 'icon-container' },
+      { name: 'Color Shift', cls: 'anim-color', wrapEl: 'icon-container' },
+      { name: 'Matrix Rain', cls: 'anim-matrix', wrapEl: 'icon-container' },
+      { name: 'Orbit', cls: 'anim-orbit', wrapEl: 'icon-container' },
+      { name: 'Morph', cls: 'anim-morph', wrapEl: 'icon-container' }
+    ]
+  },
+
+  halftoneSvg: {
+    label: 'Halftone SVG',
+    anims: [
+      { name: 'Breathe', cls: 'anim-breathe',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="2.667" fill="white"/><circle cx="10.667" cy="16" r="2.267" fill="white"/><circle cx="21.333" cy="16" r="2.267" fill="white"/><circle cx="16" cy="10.667" r="2.267" fill="white"/><circle cx="16" cy="21.333" r="2.267" fill="white"/><circle cx="10.667" cy="10.667" r="1.733" fill="white"/><circle cx="21.333" cy="10.667" r="1.733" fill="white"/><circle cx="10.667" cy="21.333" r="1.733" fill="white"/><circle cx="21.333" cy="21.333" r="1.733" fill="white"/><circle cx="5.333" cy="16" r="1.067" fill="white"/><circle cx="26.667" cy="16" r="1.067" fill="white"/><circle cx="16" cy="5.333" r="1.067" fill="white"/><circle cx="16" cy="26.667" r="1.067" fill="white"/><circle cx="5.333" cy="10.667" r="0.667" fill="white"/><circle cx="5.333" cy="21.333" r="0.667" fill="white"/><circle cx="26.667" cy="10.667" r="0.667" fill="white"/><circle cx="26.667" cy="21.333" r="0.667" fill="white"/></svg>` },
+      { name: 'Radial Pulse', cls: 'anim-radial-pulse',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle class="ring0" cx="16" cy="16" r="2.667" fill="white"/><circle class="ring1" cx="10.667" cy="16" r="2.267" fill="white"/><circle class="ring1" cx="21.333" cy="16" r="2.267" fill="white"/><circle class="ring1" cx="16" cy="10.667" r="2.267" fill="white"/><circle class="ring1" cx="16" cy="21.333" r="2.267" fill="white"/><circle class="ring2" cx="10.667" cy="10.667" r="1.733" fill="white"/><circle class="ring2" cx="21.333" cy="10.667" r="1.733" fill="white"/><circle class="ring2" cx="10.667" cy="21.333" r="1.733" fill="white"/><circle class="ring2" cx="21.333" cy="21.333" r="1.733" fill="white"/><circle class="ring3" cx="5.333" cy="16" r="1.067" fill="white"/><circle class="ring3" cx="26.667" cy="16" r="1.067" fill="white"/><circle class="ring3" cx="16" cy="5.333" r="1.067" fill="white"/><circle class="ring3" cx="16" cy="26.667" r="1.067" fill="white"/><circle class="ring4" cx="5.333" cy="10.667" r="0.667" fill="white"/><circle class="ring4" cx="5.333" cy="21.333" r="0.667" fill="white"/><circle class="ring4" cx="26.667" cy="10.667" r="0.667" fill="white"/><circle class="ring4" cx="26.667" cy="21.333" r="0.667" fill="white"/></svg>` },
+      { name: 'Heartbeat', cls: 'anim-heartbeat',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="2.667" fill="white"/><circle cx="10.667" cy="16" r="2.267" fill="white"/><circle cx="21.333" cy="16" r="2.267" fill="white"/><circle cx="16" cy="10.667" r="2.267" fill="white"/><circle cx="16" cy="21.333" r="2.267" fill="white"/><circle cx="10.667" cy="10.667" r="1.733" fill="white"/><circle cx="21.333" cy="10.667" r="1.733" fill="white"/><circle cx="10.667" cy="21.333" r="1.733" fill="white"/><circle cx="21.333" cy="21.333" r="1.733" fill="white"/><circle cx="5.333" cy="16" r="1.067" fill="white"/><circle cx="26.667" cy="16" r="1.067" fill="white"/><circle cx="16" cy="5.333" r="1.067" fill="white"/><circle cx="16" cy="26.667" r="1.067" fill="white"/><circle cx="5.333" cy="10.667" r="0.667" fill="white"/><circle cx="5.333" cy="21.333" r="0.667" fill="white"/><circle cx="26.667" cy="10.667" r="0.667" fill="white"/><circle cx="26.667" cy="21.333" r="0.667" fill="white"/></svg>` },
+      { name: 'Shimmer', cls: 'anim-shimmer',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle class="col-2" cx="16" cy="16" r="2.667" fill="white"/><circle class="col-1" cx="10.667" cy="16" r="2.267" fill="white"/><circle class="col-3" cx="21.333" cy="16" r="2.267" fill="white"/><circle class="col-2" cx="16" cy="10.667" r="2.267" fill="white"/><circle class="col-2" cx="16" cy="21.333" r="2.267" fill="white"/><circle class="col-1" cx="10.667" cy="10.667" r="1.733" fill="white"/><circle class="col-3" cx="21.333" cy="10.667" r="1.733" fill="white"/><circle class="col-1" cx="10.667" cy="21.333" r="1.733" fill="white"/><circle class="col-3" cx="21.333" cy="21.333" r="1.733" fill="white"/><circle class="col-0" cx="5.333" cy="16" r="1.067" fill="white"/><circle class="col-4" cx="26.667" cy="16" r="1.067" fill="white"/><circle class="col-2" cx="16" cy="5.333" r="1.067" fill="white"/><circle class="col-2" cx="16" cy="26.667" r="1.067" fill="white"/><circle class="col-0" cx="5.333" cy="10.667" r="0.667" fill="white"/><circle class="col-0" cx="5.333" cy="21.333" r="0.667" fill="white"/><circle class="col-4" cx="26.667" cy="10.667" r="0.667" fill="white"/><circle class="col-4" cx="26.667" cy="21.333" r="0.667" fill="white"/></svg>` },
+      { name: 'Magnetic Pull', cls: 'anim-magnetic',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="2.667" fill="white" style="--dx:0px;--dy:0px"/><circle cx="10.667" cy="16" r="2.267" fill="white" style="--dx:1.5px;--dy:0px"/><circle cx="21.333" cy="16" r="2.267" fill="white" style="--dx:-1.5px;--dy:0px"/><circle cx="16" cy="10.667" r="2.267" fill="white" style="--dx:0px;--dy:1.5px"/><circle cx="16" cy="21.333" r="2.267" fill="white" style="--dx:0px;--dy:-1.5px"/><circle cx="10.667" cy="10.667" r="1.733" fill="white" style="--dx:1.2px;--dy:1.2px"/><circle cx="21.333" cy="10.667" r="1.733" fill="white" style="--dx:-1.2px;--dy:1.2px"/><circle cx="10.667" cy="21.333" r="1.733" fill="white" style="--dx:1.2px;--dy:-1.2px"/><circle cx="21.333" cy="21.333" r="1.733" fill="white" style="--dx:-1.2px;--dy:-1.2px"/><circle cx="5.333" cy="16" r="1.067" fill="white" style="--dx:3px;--dy:0px"/><circle cx="26.667" cy="16" r="1.067" fill="white" style="--dx:-3px;--dy:0px"/><circle cx="16" cy="5.333" r="1.067" fill="white" style="--dx:0px;--dy:3px"/><circle cx="16" cy="26.667" r="1.067" fill="white" style="--dx:0px;--dy:-3px"/><circle cx="5.333" cy="10.667" r="0.667" fill="white" style="--dx:2.5px;--dy:1.5px"/><circle cx="5.333" cy="21.333" r="0.667" fill="white" style="--dx:2.5px;--dy:-1.5px"/><circle cx="26.667" cy="10.667" r="0.667" fill="white" style="--dx:-2.5px;--dy:1.5px"/><circle cx="26.667" cy="21.333" r="0.667" fill="white" style="--dx:-2.5px;--dy:-1.5px"/></svg>` },
+      { name: 'Orbital Rings', cls: 'anim-orbital',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="2.667" fill="white"/><g class="rg1"><circle cx="10.667" cy="16" r="2.267" fill="white"/><circle cx="21.333" cy="16" r="2.267" fill="white"/><circle cx="16" cy="10.667" r="2.267" fill="white"/><circle cx="16" cy="21.333" r="2.267" fill="white"/></g><g class="rg2"><circle cx="10.667" cy="10.667" r="1.733" fill="white"/><circle cx="21.333" cy="10.667" r="1.733" fill="white"/><circle cx="10.667" cy="21.333" r="1.733" fill="white"/><circle cx="21.333" cy="21.333" r="1.733" fill="white"/></g><g class="rg3"><circle cx="5.333" cy="16" r="1.067" fill="white"/><circle cx="26.667" cy="16" r="1.067" fill="white"/><circle cx="16" cy="5.333" r="1.067" fill="white"/><circle cx="16" cy="26.667" r="1.067" fill="white"/></g><g class="rg4"><circle cx="5.333" cy="10.667" r="0.667" fill="white"/><circle cx="5.333" cy="21.333" r="0.667" fill="white"/><circle cx="26.667" cy="10.667" r="0.667" fill="white"/><circle cx="26.667" cy="21.333" r="0.667" fill="white"/></g></svg>` },
+      { name: 'Wave', cls: 'anim-svg-wave',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle class="col-2" cx="16" cy="16" r="2.667" fill="white"/><circle class="col-1" cx="10.667" cy="16" r="2.267" fill="white"/><circle class="col-3" cx="21.333" cy="16" r="2.267" fill="white"/><circle class="col-2" cx="16" cy="10.667" r="2.267" fill="white"/><circle class="col-2" cx="16" cy="21.333" r="2.267" fill="white"/><circle class="col-1" cx="10.667" cy="10.667" r="1.733" fill="white"/><circle class="col-3" cx="21.333" cy="10.667" r="1.733" fill="white"/><circle class="col-1" cx="10.667" cy="21.333" r="1.733" fill="white"/><circle class="col-3" cx="21.333" cy="21.333" r="1.733" fill="white"/><circle class="col-0" cx="5.333" cy="16" r="1.067" fill="white"/><circle class="col-4" cx="26.667" cy="16" r="1.067" fill="white"/><circle class="col-2" cx="16" cy="5.333" r="1.067" fill="white"/><circle class="col-2" cx="16" cy="26.667" r="1.067" fill="white"/><circle class="col-0" cx="5.333" cy="10.667" r="0.667" fill="white"/><circle class="col-0" cx="5.333" cy="21.333" r="0.667" fill="white"/><circle class="col-4" cx="26.667" cy="10.667" r="0.667" fill="white"/><circle class="col-4" cx="26.667" cy="21.333" r="0.667" fill="white"/></svg>` },
+      { name: 'Scatter & Reform', cls: 'anim-scatter',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="2.667" fill="white" style="--sx:0px;--sy:0px"/><circle cx="10.667" cy="16" r="2.267" fill="white" style="--sx:-4px;--sy:0px"/><circle cx="21.333" cy="16" r="2.267" fill="white" style="--sx:4px;--sy:0px"/><circle cx="16" cy="10.667" r="2.267" fill="white" style="--sx:0px;--sy:-4px"/><circle cx="16" cy="21.333" r="2.267" fill="white" style="--sx:0px;--sy:4px"/><circle cx="10.667" cy="10.667" r="1.733" fill="white" style="--sx:-3px;--sy:-3px"/><circle cx="21.333" cy="10.667" r="1.733" fill="white" style="--sx:3px;--sy:-3px"/><circle cx="10.667" cy="21.333" r="1.733" fill="white" style="--sx:-3px;--sy:3px"/><circle cx="21.333" cy="21.333" r="1.733" fill="white" style="--sx:3px;--sy:3px"/><circle cx="5.333" cy="16" r="1.067" fill="white" style="--sx:-6px;--sy:0px"/><circle cx="26.667" cy="16" r="1.067" fill="white" style="--sx:6px;--sy:0px"/><circle cx="16" cy="5.333" r="1.067" fill="white" style="--sx:0px;--sy:-6px"/><circle cx="16" cy="26.667" r="1.067" fill="white" style="--sx:0px;--sy:6px"/><circle cx="5.333" cy="10.667" r="0.667" fill="white" style="--sx:-5px;--sy:-3px"/><circle cx="5.333" cy="21.333" r="0.667" fill="white" style="--sx:-5px;--sy:3px"/><circle cx="26.667" cy="10.667" r="0.667" fill="white" style="--sx:5px;--sy:-3px"/><circle cx="26.667" cy="21.333" r="0.667" fill="white" style="--sx:5px;--sy:3px"/></svg>` },
+      { name: 'Glow Pulse', cls: 'anim-glow',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle class="ring0" cx="16" cy="16" r="2.667" fill="white"/><circle class="ring1" cx="10.667" cy="16" r="2.267" fill="white"/><circle class="ring1" cx="21.333" cy="16" r="2.267" fill="white"/><circle class="ring1" cx="16" cy="10.667" r="2.267" fill="white"/><circle class="ring1" cx="16" cy="21.333" r="2.267" fill="white"/><circle class="ring2" cx="10.667" cy="10.667" r="1.733" fill="white"/><circle class="ring2" cx="21.333" cy="10.667" r="1.733" fill="white"/><circle class="ring2" cx="10.667" cy="21.333" r="1.733" fill="white"/><circle class="ring2" cx="21.333" cy="21.333" r="1.733" fill="white"/><circle class="ring3" cx="5.333" cy="16" r="1.067" fill="white"/><circle class="ring3" cx="26.667" cy="16" r="1.067" fill="white"/><circle class="ring3" cx="16" cy="5.333" r="1.067" fill="white"/><circle class="ring3" cx="16" cy="26.667" r="1.067" fill="white"/><circle class="ring4" cx="5.333" cy="10.667" r="0.667" fill="white"/><circle class="ring4" cx="5.333" cy="21.333" r="0.667" fill="white"/><circle class="ring4" cx="26.667" cy="10.667" r="0.667" fill="white"/><circle class="ring4" cx="26.667" cy="21.333" r="0.667" fill="white"/></svg>` },
+      { name: 'Slow Spin', cls: 'anim-slow-spin',
+        svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="2.667" fill="white"/><circle cx="10.667" cy="16" r="2.267" fill="white"/><circle cx="21.333" cy="16" r="2.267" fill="white"/><circle cx="16" cy="10.667" r="2.267" fill="white"/><circle cx="16" cy="21.333" r="2.267" fill="white"/><circle cx="10.667" cy="10.667" r="1.733" fill="white"/><circle cx="21.333" cy="10.667" r="1.733" fill="white"/><circle cx="10.667" cy="21.333" r="1.733" fill="white"/><circle cx="21.333" cy="21.333" r="1.733" fill="white"/><circle cx="5.333" cy="16" r="1.067" fill="white"/><circle cx="26.667" cy="16" r="1.067" fill="white"/><circle cx="16" cy="5.333" r="1.067" fill="white"/><circle cx="16" cy="26.667" r="1.067" fill="white"/><circle cx="5.333" cy="10.667" r="0.667" fill="white"/><circle cx="5.333" cy="21.333" r="0.667" fill="white"/><circle cx="26.667" cy="10.667" r="0.667" fill="white"/><circle cx="26.667" cy="21.333" r="0.667" fill="white"/></svg>` }
+    ]
+  },
+
+  jadeMatrix: {
+    label: 'Jade Matrix',
+    svg: `<svg width="48" height="48" viewBox="0 0 32 32" fill="none">
+      <line class="ln1" x1="5.333" y1="5.333" x2="16" y2="5.333" stroke="white" stroke-opacity="0.9" stroke-width="2.4" stroke-linecap="round"/>
+      <line class="ln2" x1="16" y1="5.333" x2="26.667" y2="5.333" stroke="white" stroke-opacity="0.25" stroke-width="0.533" stroke-linecap="round"/>
+      <line class="ln3" x1="5.333" y1="5.333" x2="5.333" y2="16" stroke="white" stroke-opacity="0.3" stroke-width="0.8" stroke-linecap="round"/>
+      <line class="ln4" x1="5.333" y1="5.333" x2="16" y2="16" stroke="white" stroke-opacity="0.7" stroke-width="1.6" stroke-linecap="round"/>
+      <line class="ln5" x1="16" y1="16" x2="26.667" y2="16" stroke="white" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round"/>
+      <line class="ln6" x1="16" y1="16" x2="16" y2="26.667" stroke="white" stroke-opacity="0.25" stroke-width="0.667" stroke-linecap="round"/>
+      <line class="ln7" x1="26.667" y1="16" x2="26.667" y2="26.667" stroke="white" stroke-opacity="0.5" stroke-width="1.333" stroke-linecap="round"/>
+      <line class="ln8" x1="5.333" y1="26.667" x2="16" y2="26.667" stroke="white" stroke-opacity="0.2" stroke-width="0.533" stroke-linecap="round"/>
+      <circle cx="5.333" cy="5.333" r="1.067" fill="white"/><circle cx="16" cy="5.333" r="1.067" fill="white"/><circle cx="26.667" cy="5.333" r="1.067" fill="white"/>
+      <circle cx="5.333" cy="16" r="1.067" fill="white"/><circle cx="16" cy="16" r="1.067" fill="white"/><circle cx="26.667" cy="16" r="1.067" fill="white"/>
+      <circle cx="5.333" cy="26.667" r="1.067" fill="white"/><circle cx="16" cy="26.667" r="1.067" fill="white"/><circle cx="26.667" cy="26.667" r="1.067" fill="white"/>
+    </svg>`,
+    anims: [
+      { name: 'Breathe', cls: 'j-breathe' },
+      { name: 'Cascade', cls: 'j-cascade' },
+      { name: 'Node Ripple', cls: 'j-ripple' },
+      { name: 'Rotate', cls: 'j-rotate' },
+      { name: 'Heartbeat', cls: 'j-heartbeat' },
+      { name: 'Data Flow', cls: 'j-dataflow' }
+    ]
+  }
+};
+
+// ===== DROPDOWN LOGIC =====
+let currentActive = null;
+
+function buildDropdown() {
+  const dd = document.getElementById('dropdown');
+  let html = '';
+
+  // Default option
+  html += '<div class="dropdown-item active" data-default="true" onclick="setDefault(this)"><span class="item-num"></span>Default Spinner</div>';
+
+  for (const [key, icon] of Object.entries(ICONS)) {
+    html += `<div class="dropdown-group">${icon.label}</div>`;
+    icon.anims.forEach((a, i) => {
+      html += `<div class="dropdown-item" data-icon="${key}" data-idx="${i}" onclick="selectAnim(this,'${key}',${i})"><span class="item-num">${String(i+1).padStart(2,'0')}</span>${a.name}</div>`;
+    });
+  }
+
+  dd.innerHTML = html;
+}
+
+function toggleDropdown() {
+  const dd = document.getElementById('dropdown');
+  const nav = document.getElementById('navCenter');
+  const overlay = document.getElementById('dropdownOverlay');
+  const isOpen = dd.classList.contains('open');
+
+  dd.classList.toggle('open', !isOpen);
+  nav.classList.toggle('open', !isOpen);
+  overlay.classList.toggle('open', !isOpen);
+}
+
+function clearActive() {
+  document.querySelectorAll('.dropdown-item.active').forEach(el => el.classList.remove('active'));
+}
+
+function setDefault(el) {
+  clearActive();
+  el.classList.add('active');
+  document.getElementById('loaderSlot').innerHTML = '<div class="default-loader"></div>';
+  toggleDropdown();
+}
+
+function selectAnim(el, iconKey, idx) {
+  clearActive();
+  el.classList.add('active');
+
+  const icon = ICONS[iconKey];
+  const anim = icon.anims[idx];
+  const slot = document.getElementById('loaderSlot');
+
+  const wrapClass = anim.wrapEl || 'icon-wrap';
+  let inner = '';
+
+  if (icon.divTemplate) {
+    inner = icon.divTemplate;
+  } else {
+    inner = anim.svg || icon.svg;
+  }
+
+  const extra = anim.extra || '';
+  slot.innerHTML = `<div class="${wrapClass} ${anim.cls}">${extra}${inner}</div>`;
+
+  toggleDropdown();
+}
+
+// Init
+buildDropdown();
+
+</script>
+
+</body>
+</html>
