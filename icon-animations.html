@@ -390,6 +390,9 @@
     75%      { border-radius: 50% 0% 50% 0%; transform: scale(1.1) rotate(135deg); }
   }
 
+  /* Crystal canvas */
+  .crystal-canvas { display: block; width: 80px; height: 80px; }
+
   /* Pause on hover */
   .card:hover .halftone,
   .card:hover .dot,
@@ -4499,21 +4502,41 @@
     </div>
   </div>
   <div class="grid">
-    <div class="card">
+    <div class="card crystal-card" data-crystal="0">
       <span class="badge">01</span>
-      <div class="icon-wrap l-line-pulse">
-        <svg class="l-icon" viewBox="0 0 32 32" fill="none"><path class="lp1" d="M16 2.66667L29.3333 13.3333L22.6667 29.3333H9.33333L2.66667 13.3333L16 2.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp2" d="M16 2.66667V29.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp3" d="M2.66667 13.3333H29.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp4" d="M9.33333 29.3333L29.3333 13.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp5" d="M22.6667 29.3333L2.66667 13.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <h3>Line Pulse</h3>
-      <p>Each path breathes at its own unique rhythm &mdash; organic, polyrhythmic shimmer.</p>
+      <div class="icon-wrap"><canvas class="crystal-canvas"></canvas></div>
+      <h3>Classic Spin</h3>
+      <p>Steady Y-axis rotation with a gentle upward tilt &mdash; the quintessential gem showcase.</p>
     </div>
-    <div class="card">
+    <div class="card crystal-card" data-crystal="1">
       <span class="badge">02</span>
-      <div class="icon-wrap l-stagger-reveal">
-        <svg class="l-icon" viewBox="0 0 32 32" fill="none"><path class="lp1" d="M16 2.66667L29.3333 13.3333L22.6667 29.3333H9.33333L2.66667 13.3333L16 2.66667Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp2" d="M16 2.66667V29.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp3" d="M2.66667 13.3333H29.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp4" d="M9.33333 29.3333L29.3333 13.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path class="lp5" d="M22.6667 29.3333L2.66667 13.3333" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <h3>Stagger Reveal</h3>
-      <p>Each line fades in one at a time &mdash; pentagon first, then spine, bar, and diagonals.</p>
+      <div class="icon-wrap"><canvas class="crystal-canvas"></canvas></div>
+      <h3>Overhead Tilt</h3>
+      <p>Steeper overhead viewing angle reveals the top facets as the crystal spins.</p>
+    </div>
+    <div class="card crystal-card" data-crystal="2">
+      <span class="badge">03</span>
+      <div class="icon-wrap"><canvas class="crystal-canvas"></canvas></div>
+      <h3>Counter Spin</h3>
+      <p>Mirrored counter-rotation &mdash; the gem spins in the opposite direction with matching tilt.</p>
+    </div>
+    <div class="card crystal-card" data-crystal="3">
+      <span class="badge">04</span>
+      <div class="icon-wrap"><canvas class="crystal-canvas"></canvas></div>
+      <h3>Slow Drift</h3>
+      <p>X-tilt slowly evolves as the gem spins &mdash; a dreamy, meandering rotation.</p>
+    </div>
+    <div class="card crystal-card" data-crystal="4">
+      <span class="badge">05</span>
+      <div class="icon-wrap"><canvas class="crystal-canvas"></canvas></div>
+      <h3>Tumble</h3>
+      <p>True 3-axis tumble &mdash; Y and X both advance for a weightless, free-floating effect.</p>
+    </div>
+    <div class="card crystal-card" data-crystal="5">
+      <span class="badge">06</span>
+      <div class="icon-wrap"><canvas class="crystal-canvas"></canvas></div>
+      <h3>Precession</h3>
+      <p>Z-axis roll layered with Y-spin and fixed X-tilt &mdash; a gyroscopic precession orbit.</p>
     </div>
   </div>
 </div>
@@ -4704,6 +4727,95 @@ function switchTab(tabId, btn) {
     card.addEventListener('mouseenter', () => { paused = true; cancelAnimationFrame(raf); });
     card.addEventListener('mouseleave', () => { paused = false; startTime = null; raf = requestAnimationFrame(tick); });
     raf = requestAnimationFrame(tick);
+  }
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
+})();
+</script>
+
+<script>
+// Crystal 3D gem renderer — canvas-based wireframe with perspective
+(function () {
+  // Rotation helpers
+  function ry(v, a) { const [x, y, z] = v, c = Math.cos(a), s = Math.sin(a); return [x*c + z*s, y, -x*s + z*c]; }
+  function rx(v, a) { const [x, y, z] = v, c = Math.cos(a), s = Math.sin(a); return [x, y*c - z*s, y*s + z*c]; }
+  function rz(v, a) { const [x, y, z] = v, c = Math.cos(a), s = Math.sin(a); return [x*c - y*s, x*s + y*c, z]; }
+
+  // Gem geometry — pentagon front face + back apex
+  const VERTS = [
+    [ 0.000, -0.833,  0.15],  // 0 top
+    [ 0.667, -0.333,  0.15],  // 1 upper-right
+    [ 0.500,  0.500,  0.15],  // 2 lower-right
+    [-0.500,  0.500,  0.15],  // 3 lower-left
+    [-0.667, -0.333,  0.15],  // 4 upper-left
+    [ 0.000,  0.000, -0.55],  // 5 back apex
+  ];
+  const EDGES = [
+    [0,1],[1,2],[2,3],[3,4],[4,0],  // outer pentagon
+    [0,3],[0,2],[4,2],[1,3],        // internal facet lines
+    [0,5],[1,5],[2,5],[3,5],[4,5],  // pavilion edges
+  ];
+
+  const CONFIGS = [
+    { speed: 0.006, offset: 0,    rotate: (v, t) => rx(ry(v, t), 0.30) },
+    { speed: 0.007, offset: 1.05, rotate: (v, t) => rx(ry(v, t), 0.62) },
+    { speed: 0.007, offset: 2.20, rotate: (v, t) => rx(ry(v, -t), 0.30) },
+    { speed: 0.005, offset: 0.70, rotate: (v, t) => rx(ry(v, t), 0.28 + Math.sin(t * 0.18) * 0.38) },
+    { speed: 0.007, offset: 3.50, rotate: (v, t) => rx(ry(v, t), t * 0.11) },
+    { speed: 0.006, offset: 1.80, rotate: (v, t) => rx(rz(ry(v, t), t * 0.08), 0.38) },
+  ];
+
+  function initCrystal(canvas, config) {
+    const dpr = window.devicePixelRatio || 1;
+    const CSS = 80;
+    canvas.width = CSS * dpr;
+    canvas.height = CSS * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const S = CSS, sc = S * 0.40, D = 3.0;
+    let t = config.offset, raf = null, paused = false;
+
+    function project(v) {
+      const [x, y, z] = v;
+      const w = D / (D - z);
+      return [x * w * sc + S / 2, y * w * sc + S / 2, z];
+    }
+
+    function frame() {
+      ctx.clearRect(0, 0, S, S);
+      const rotated = VERTS.map(v => config.rotate(v, t));
+      const proj = rotated.map(project);
+      EDGES.forEach(([i, j]) => {
+        const avgZ = (rotated[i][2] + rotated[j][2]) * 0.5;
+        const tZ = Math.max(0, Math.min(1, (avgZ + 0.65) / 1.20));
+        const alpha = 0.10 + 0.90 * tZ;
+        const lw = 0.50 + 1.50 * tZ;
+        ctx.beginPath();
+        ctx.moveTo(proj[i][0], proj[i][1]);
+        ctx.lineTo(proj[j][0], proj[j][1]);
+        ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+        ctx.lineWidth = lw;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      });
+      t += config.speed;
+      if (!paused) raf = requestAnimationFrame(frame);
+    }
+
+    // Pause on hover
+    const card = canvas.closest('.card');
+    if (card) {
+      card.addEventListener('mouseenter', () => { paused = true; if (raf) cancelAnimationFrame(raf); });
+      card.addEventListener('mouseleave', () => { paused = false; raf = requestAnimationFrame(frame); });
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  function init() {
+    document.querySelectorAll('.crystal-card').forEach(card => {
+      const idx = parseInt(card.dataset.crystal);
+      const canvas = card.querySelector('.crystal-canvas');
+      if (canvas && CONFIGS[idx]) initCrystal(canvas, CONFIGS[idx]);
+    });
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();
